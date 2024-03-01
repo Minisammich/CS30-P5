@@ -98,7 +98,7 @@ function trianglesLoop(){
       triangle(xCurr,yCurr,xPos[0],yPos[0],mouseX,mouseY);
     }
     if(yPos[i]>=(height*0.95)-30 && xPos[i]>=(width*0.95)){
-      triangle(xCurr,yCurr,xCurr,(yCurr-((height*0.95)-30),mouseX,mouseY));
+      triangle(xCurr,yCurr,xCurr,((height*0.95)-30),mouseX,mouseY);
     }
 
     if((yPos[i]<=(height*0.05))){
