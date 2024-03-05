@@ -12,6 +12,10 @@ let mPosLastLClick = 800/8;
 let mPosLastMClick = 800/8;
 let moonCoverOffset = -15;
 let rotationOffset;
+let starState = 0;
+let starPosX = [];
+let starPosY = [];
+let starSize = [];
 
 function inMoonBounds(){ //checks if cursor is within the bounds of the moon
   let moonScale = ((canvasX+canvasY)/2)/10; //sets scale of the moon based on canvas sign
@@ -88,6 +92,25 @@ function moon(){
 
   rotationOffset = (moonPos/50); //sets offset of the light based on position of the moon
   return(light);
+}
+
+function stars(){
+  if(keyCode===UP_ARROW){
+    if(starState<2){
+      starState++;
+    }
+  } else if(keyCode===DOWN_ARROW){
+    if(starState>0){
+      starState--;
+    }
+  }
+
+  for(let i=0; i<50; i++){
+    starPosX.push(random(width));
+    starPosY.push(random(height));
+    starSize.push(random(1,5));
+  }
+
 }
 
 function draw() {
