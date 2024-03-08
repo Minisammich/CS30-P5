@@ -4,8 +4,17 @@
 //
 // Extra for Experts:
 // - Creates a grid of random colours, takes inputs to change size and randomize colours.
+//
+//-----------
+// CONTROLS:
+//-----------
+//
+// L-Click - Zooms in
+// R-Click - Zooms Out
+// SHIFT   - Randomizes Colours
+// CTRL    - Switches Between Colour Modes
 
-let squareSize=40,columns,rows,xPos,yPos,colourList,rX,rY,squareColour;
+let squareSize=40,columns,rows,xPos,yPos,colourList,rX,rY,squareColour,colourState=0;
 
 function setup() {
   document.addEventListener("contextmenu", event => event.preventDefault())
@@ -16,9 +25,9 @@ function setup() {
 }
 
 function mousePressed() {
-  if(mouseButton===LEFT) {
+  if(mouseButton===LEFT&&squareSize>=10) {
     squareSize/=1.2;
-  } else if(mouseButton===RIGHT) {
+  } else if(mouseButton===RIGHT&&squareSize<=300) {
     squareSize*=1.2;
   }
 
@@ -26,17 +35,41 @@ function mousePressed() {
   rows = windowHeight/squareSize;
 
   calculateGrid();
-  console.log(colourList)
+}
+
+function keyPressed() {
+  if(keyCode===SHIFT) {
+    calculateGrid();
+  }
+
+  if(keyCode===CONTROL) {
+    if(colourState===0) {
+      colourState=1;
+    } else if(colourState===1){
+      colourState=2;
+    } else {
+      colourState=0;
+    }
+    calculateGrid();
+  }
+
+  return(false);
 }
 
 function calculateGrid() {
   xPos = []; yPos = []; colourList = [];
   for(let yCount=0; yCount<rows; yCount++) {
     for(let xCount=0; xCount<columns; xCount++) {
-      if(xCount*squareSize<width&&yCount*squareSize<height){
+      if((xCount*squareSize)+squareSize<=width&&(yCount*squareSize)+squareSize<=height){
         xPos.push(xCount*squareSize);
         yPos.push(yCount*squareSize);
-        colourList.push([random(0,255),random(0,255),random(0,255)]);
+        if(colourState===0) {
+          colourList.push([random(0,255),random(0,255),random(0,255)]); //Full Random
+        } else if(colourState===1) {
+          colourList.push([random(70,150),random(30,70),random(70,255)]); //Random Purple
+        } else {
+          colourList.push(random(0,255)); //Random Greyscale
+        }
       }
     }
     
@@ -47,12 +80,12 @@ function drawGrid() {
   for(let i=0; i < xPos.length; i++) {
     rX = xPos[i]; rY = yPos[i]; squareColour = colourList[i];
     fill(squareColour);
-    rect(rX, rY, rX+squareSize, rY+squareSize);
+    rect(rX, rY, squareSize, squareSize);
   }
 }
 
 function draw() {
-  frameRate(60);
+  frameRate(165);
   background(220);
   drawGrid();
 }
