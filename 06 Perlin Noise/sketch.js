@@ -21,7 +21,7 @@ function partitions() {
 }
 
 function donut() {
-  donutWidth = 25;
+  donutWidth = 15;
   diameter = map(noise(time),0,1,0,100);
   circle(width/4,height/4,diameter);
   fill(220);
@@ -31,5 +31,5 @@ function donut() {
 function draw() {
   partitions();
   donut();
-  time+=0.01;
+  time+=0.025;
 }

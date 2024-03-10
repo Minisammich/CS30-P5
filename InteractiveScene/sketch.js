@@ -1,26 +1,59 @@
+// Interactive Scene
+// Jeffrey Hamilton
+//
+// Description:
+// - Draws a landscape scene with an interactive moon and stars, and static grass and mountains.
+// - The moon casts light upon the mountains and grass relative to its position in the sky and its cycle.
+//
+// --------------
+//    CONTROLS
+// --------------
+// UP_ARROW:     Change State Up
+// DOWN_ARROW:   Change State Down
+// Shift:        Randomize Stars
+// MIDDLE Click: Move Sky (NOT when stateVar=0)
+// LEFT Click:   Change Moon Cycle (NOT when stateVar=0)
+// CONTROL:      Reset time
+
+
 let canvasX;
 let canvasY;
 
 function setup() {
+  document.addEventListener("contextmenu", event => event.preventDefault())
   canvasX = windowWidth;
   canvasY = windowHeight;
+  starCount = ((canvasX+canvasY)/8) //Smaller windows get less stars, vice versa.
   createCanvas(canvasX, canvasY);
   noStroke();
+  calcStars();
 }
 
 let mPosLastLClick = 800/8;
 let mPosLastMClick = 800/8;
+let starCount;
 let moonCoverOffset = -15;
 let rotationOffset;
-let starState = 0;
+let stateVar = 0;
 let starPosX = [];
 let starPosY = [];
 let starSize = [];
+let starOffset = 0, starMouseOffset = 0;
+let time=0;
+
+
+function keyPressed() {
+  calcStars();
+  if(keyCode===CONTROL){
+    time=0;
+  }
+}
+
 
 function inMoonBounds(){ //checks if cursor is within the bounds of the moon
   let moonScale = ((canvasX+canvasY)/2)/10; //sets scale of the moon based on canvas sign
   if(mouseX>=mPosLastMClick-(moonScale+10)&&mouseX<=mPosLastMClick+(moonScale+10)&&
-     mouseY>=height/9-(moonScale-10)&&mouseY<=height/9+(moonScale-10)){
+     mouseY>=height/4-(mPosLastMClick/5)-(moonScale-10)&&mouseY<=height/4-(mPosLastMClick/5)+(moonScale-10)){
     return(true);
   } else {
     return(false);
@@ -76,48 +109,102 @@ function mountains(light) {
 function moon(){
   let moonScale = ((canvasX+canvasY)/2)/10; //sets scale of the moon based on canvas sign
   let light;
-  let moonPos = mPosLastMClick;
-  let moonCoverPos = mPosLastMClick-moonCoverOffset; //sets position of the shadow on the moon
-  if(moonCoverOffset>=0){ //Sets light value based on the offset of the shadow relative to the moon
-    light = ((moonCoverOffset/3)/(moonScale/50));
+  let moonPosX,moonPosY;
+  let moonCoverPosX,moonCoverPosY;
+
+  if(stateVar===1||stateVar===2){
+    moonPosX = mPosLastMClick;
+    moonPosY = height/4-(mPosLastMClick/5)
+    moonCoverPosX = mPosLastMClick-moonCoverOffset;
+    moonCoverPosY = (height/4-(mPosLastMClick/5))+(moonCoverOffset/5); //sets position of the shadow on the moon
+    if(moonCoverOffset>=0){ //Sets light value based on the offset of the shadow relative to the moon
+      light = ((moonCoverOffset/3)/(moonScale/50));
+    } else {
+      light = -((moonCoverOffset/3)/(moonScale/50));
+    }
+
   } else {
-    light = -((moonCoverOffset/3)/(moonScale/50));
+    moonPosX = (width-time)+(moonScale/2);
+    moonPosY = (height/4-(height-time)/5);
+    moonCoverPosX = ((width-time)+20)+(moonScale/2);
+    moonCoverPosY = (height/4-(height-time)/5)-(10); //sets position of the shadow on the moon
+    light=0;
   }
   
   fill(175,175,125); //fills in the moons colour
-  circle(moonPos,height/9, moonScale);
+  circle(moonPosX,moonPosY, moonScale);
 
   fill(30,25,100); //fills in the shadow on the moon as BG colour
-  circle(moonCoverPos, height/9, moonScale-3);
-
-  rotationOffset = (moonPos/50); //sets offset of the light based on position of the moon
+  circle(moonCoverPosX, moonCoverPosY, moonScale-3);
+  if(moonPosX>0){
+    rotationOffset = (moonPosX/125); //sets offset of the light based on position of the moon
+  } else if(moonPosX<-3*width){
+    rotationOffset = -(moonPosX/320);
+  } else {
+    rotationOffset=0;
+  }
   return(light);
 }
 
-function stars(){
+function calcStars(){
   if(keyCode===UP_ARROW){
-    if(starState<2){
-      starState++;
+    if(stateVar<2){
+      stateVar++;
     }
   } else if(keyCode===DOWN_ARROW){
-    if(starState>0){
-      starState--;
+    if(stateVar>0){
+      stateVar--;
     }
   }
 
-  for(let i=0; i<50; i++){
-    starPosX.push(random(width));
-    starPosY.push(random(height));
-    starSize.push(random(1,5));
+  if(keyCode===SHIFT||starPosX.length<=0){
+    starPosX=[];
+    starPosY=[];
+    starSize=[];
+    for(let i=0; i<starCount; i++){
+      starPosX.push(random(0,width));
+      starPosY.push(random(0,height/1.55));
+      starSize.push(random(1,3.5));
   }
+  }
+}
 
+function drawStars(){
+  fill(255,235,220);
+  if(stateVar===0||stateVar===1){
+    time += 1;
+    for(let i=0; i<starCount; i++){
+
+      if(stateVar===0){
+        if(time>(width*2)){
+          time=0;
+        }
+        let starX = starPosX[i]-time, starY = starPosY[i]+time/5, sizeOfStar = starSize[i];
+        while(starX<0){starX+=width}
+        while(starY>height/1.55){starY-=height/1.55}
+        circle(starX,starY,sizeOfStar);
+
+      } else {
+        if(mouseIsPressed&&mouseButton===CENTER&&inMoonBounds()){
+          starMouseOffset = (starOffset-mouseX);
+        }
+
+        let starX = starPosX[i]-starMouseOffset, starY = starPosY[i]+(starMouseOffset/5), sizeOfStar = starSize[i];
+        if(starX<0){starX+=width}
+        if(starX>width){starX-=width}
+        if(starY<0){starY+=height}
+        if(starY>height/1.55){starY-=height}
+        circle(starX,starY,sizeOfStar);
+      }
+    }
+  }
 }
 
 function draw() {
   background(30,25,100); //Nice dark blue night sky.
   lastClickedPos();
+  drawStars();
   let moonLight = moon(); //draws moon and assigns output to variable.
   grass(moonLight);     //draws grass with the R and G values increasing with moonLight.
   mountains(moonLight); //draws mountains with the RGB values increasing with moonLight.
 }
-
