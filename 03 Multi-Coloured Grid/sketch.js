@@ -14,7 +14,7 @@
 // SHIFT   - Randomizes Colours
 // CTRL    - Switches Between Colour Modes
 
-let squareSize=40,columns,rows,xPos,yPos,colourList,rX,rY,squareColour,colourState=0;
+let squareSize = 40,columns,rows,xPos,yPos,colourList,rX,rY,squareColour,colourState=0;
 
 function setup() {
   document.addEventListener("contextmenu", event => event.preventDefault())
