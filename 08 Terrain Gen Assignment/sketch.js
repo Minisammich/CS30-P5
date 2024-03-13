@@ -12,10 +12,11 @@
 // Up/Down Arrows:    Increase/Decrease Terrain Variation.
 // Shift/Control:     Increase/Decrease Speed.
 
-let rectWidth = 5, initialTerrainVariation = 50, initialSpeed = 70; // User Adjustable Variables.
+let rectWidth = 2, initialTerrainVariation = 25, initialSpeed = 150; // User Adjustable Variables.
+let drawStats = true; // Draws above variables on the top left of the canvas.
 
 let x = 0;
-let time = 0;
+let time1 = 0, time2 = 0, time3 = 0;
 let heightList = [];
 let totalHeight = 0;
 let iAtMaxHeight=0;
@@ -40,18 +41,18 @@ function keyPressed() {
   }
 
   if(keyCode===UP_ARROW){
-    initialTerrainVariation++;
+    initialTerrainVariation+=5;
     terrainVariation = map(initialTerrainVariation,0,1024,0,0.3);
   } else if(keyCode===DOWN_ARROW&&initialTerrainVariation>1) {
-    initialTerrainVariation--;
+    initialTerrainVariation-=5;
     terrainVariation = map(initialTerrainVariation,0,1024,0,0.3);
   }
 
-  if(keyCode===SHIFT&&initialSpeed<1024) {
-    initialSpeed+=20;
+  if(keyCode===SHIFT&&initialSpeed<1000) {
+    initialSpeed+=25;
     speed = map(initialSpeed/rectWidth,0,1024,0,0.25);
-  } else if(keyCode===CONTROL&&initialSpeed>20) {
-    initialSpeed-=20;
+  } else if(keyCode===CONTROL&&initialSpeed>-1000) {
+    initialSpeed-=25;
     speed = map(initialSpeed/rectWidth,0,1024,0,0.25);
   }
 }
@@ -73,15 +74,15 @@ function flag() {
   triangle(xFlag,yFlag-30,xFlag,yFlag-50,xFlag+20,yFlag-40);
 }
 
-function drawRectangles() {
+function drawRectangles(drawHeight,time) {
   let rectHeight, terrainNoise;
   x=time;
   heightList=[];
   for(let i=0; i<width; i+=rectWidth) {
     x+=terrainVariation;
     terrainNoise = noise(x);
-    rectHeight = map(terrainNoise,0,1,0,height*0.8);
-    rectColour = map(terrainNoise,0,1,0,255);
+    rectHeight = map(terrainNoise,0,1,drawHeight,0);
+    rectColour = map(rectHeight,drawHeight,0,0,255);
     heightList.push(rectHeight);
 
     totalHeight += rectHeight;
@@ -93,13 +94,36 @@ function drawRectangles() {
     stroke(rectColour);
     rect(i, height, i+rectWidth, rectHeight);
   }
+
+  avgLine();
+  flag();
+}
+
+function statsText() {
+  let x = width/128, y = height/64;
+  fill(0);
+  stroke(0);
+  text(("Speed = " + initialSpeed),x,y);
+  text(("Terrain Variation = " + initialTerrainVariation),x+90,y);
+  text(("Rectangle Width = " + rectWidth),x+230,y);
 }
 
 function draw() {
-  frameRate(40);
+  frameRate(60);
   background(220);
-  drawRectangles();
-  avgLine();
-  flag();
-  time+=speed;
+  drawRectangles(height/4,time1);
+  drawRectangles(height/2,time2);
+  drawRectangles(height/0.8,time3);
+  if(drawStats===true) {
+    statsText();
+  }
+  time1+=speed/2;
+  time2+=speed;
+  time3+=speed*2
+
+  if(time3>1.7e309){ // hahahahahahahahaha
+    time1=0;
+    time2=0;
+    time3=0;
+  }
 }
