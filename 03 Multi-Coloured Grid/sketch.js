@@ -33,7 +33,6 @@ function mousePressed() {
 
   columns = windowWidth/squareSize;
   rows = windowHeight/squareSize;
-  background(220);
   calculateGrid();
 }
 
@@ -74,6 +73,8 @@ function calculateGrid() {
     }
     
   }
+  
+  background(220);
   drawGrid();
 }
 
