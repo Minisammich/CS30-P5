@@ -25,7 +25,7 @@ function setup() {
 }
 
 function mousePressed() {
-  if(mouseButton===LEFT&&squareSize>=10) {
+  if(mouseButton===LEFT&&squareSize>=2) {
     squareSize/=1.2;
   } else if(mouseButton===RIGHT&&squareSize<=300) {
     squareSize*=1.2;
@@ -33,7 +33,7 @@ function mousePressed() {
 
   columns = windowWidth/squareSize;
   rows = windowHeight/squareSize;
-
+  background(220);
   calculateGrid();
 }
 
@@ -74,6 +74,7 @@ function calculateGrid() {
     }
     
   }
+  drawGrid();
 }
 
 function drawGrid() { 
@@ -85,7 +86,4 @@ function drawGrid() {
 }
 
 function draw() {
-  frameRate(165);
-  background(220);
-  drawGrid();
 }
