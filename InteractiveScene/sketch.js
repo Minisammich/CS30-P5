@@ -17,6 +17,11 @@
 
 let canvasX;
 let canvasY;
+let font;
+
+function preload() {
+  font = loadFont('assets/moonstrike.otf');
+}
 
 function setup() {
   document.addEventListener("contextmenu", event => event.preventDefault())
@@ -241,8 +246,8 @@ function drawSignature() { // Draws my name on the bottom-left of the screen.
   strokeWeight(4);
   stroke(20,10,60);
   fill(100,25,150);
-  textFont('Courier New');
-  textSize((canvasX+canvasY)/96);
+  textFont(font);
+  textSize((canvasX+canvasY)/64);
   text('Jeffrey Hamilton',canvasX/64,canvasY/1.02);
   noStroke();
 }

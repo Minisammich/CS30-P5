@@ -7,7 +7,7 @@
 
 let lionL, lionR;
 
-function preLoad() { // Runs prior to setup, ends when all loading is complete.
+function preload() { // Runs prior to setup, ends when all loading is complete.
   lionL = loadImage("assets/lion-left.png");
   lionR = loadImage("assets/lion-right.png");
 }
@@ -19,5 +19,5 @@ function setup() {
 
 function draw() {
   background(220);
-  image(lionL, mouseX, mouseY);
+  image(lionL,mouseX,mouseY);
 }
