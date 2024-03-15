@@ -65,7 +65,7 @@ function avgLine() {
 }
 
 function flag() {
-  let xFlag = iAtMaxHeight;
+  let xFlag = (iAtMaxHeight)+(rectWidth/2);
   let yFlag = min(heightList);
   stroke(0);
   line(xFlag,yFlag,xFlag,yFlag-50);
@@ -109,7 +109,7 @@ function statsText() {
 }
 
 function draw() {
-  frameRate(60);
+  frameRate(10);
   background(220);
   drawRectangles(height/4,time1);
   drawRectangles(height/2,time2);
