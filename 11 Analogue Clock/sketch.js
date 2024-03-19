@@ -78,14 +78,14 @@ function drawClock(clockCentreX,clockCentreY) {
   for(let i=1; i<=60; i++) { // Draws 60 evenly spaced lines around the clock face.
     if(i%5==0) { // 12 evenly distributed between the 60 are made as thicker, longer Hour Lines.
       strokeWeight(10);
-      lineLength=35;
+      lineLength=25;
     } else { // Any that aren't the 12 Hour Lines are drawn thinner and shorter.
       strokeWeight(4);
-      lineLength=25;
+      lineLength=20;
     }
     push();
     rotate((6*i));
-    line(0,(225-lineLength),0,225);
+    line(0,(215-lineLength/2),0,(215+lineLength/2));
     pop();
   }
 
@@ -100,7 +100,7 @@ function secondsHand(clockCentreX,clockCentreY) {
   translate(clockCentreX, clockCentreY);
   circle(0,0,8)
   rotate((frameCount/10)+180+clockSeconds);
-  line(0,-20,0,200);
+  line(0,-20,0,215);
   pop();
 }
 
@@ -110,7 +110,7 @@ function minuteHand(clockCentreX,clockCentreY) {
   push();
   translate(clockCentreX, clockCentreY);
   rotate((frameCount/600)+180+clockMinutes);
-  line(0,-20,0,195);
+  line(0,-20,0,190);
   pop();
 }
 
