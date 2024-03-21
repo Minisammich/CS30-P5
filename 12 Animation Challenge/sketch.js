@@ -5,16 +5,18 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let wheelDiameter = 150;
+let wheelDiameter = 30;
 let debugOutline = false;
-let wheelSpeed = 100;
-let dotSize = 20;
+let wheelSpeed = 175;
+let dotSize = 12;
 let dotCount = 6;
-let dotSpacing = 25;
+let dotSpacing = 30;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   rectMode(CENTER);
   angleMode(DEGREES);
+  textAlign(CENTER);
+  textSize(30);
   wheelSpeed = map(wheelSpeed,-255,255,-4,4);
 }
 
@@ -34,15 +36,16 @@ function mouseWheel() {
 }
 
 function loadingWheel() {
-  noFill();
+  fill(220);
   push();
-  translate(width/2,height/2);
+  translate(width/2,height/1.5);
+  text('Just a moment...',0,125);
+  //noFill();
   if(debugOutline===true){circle(0,0,wheelDiameter);}
   for(let i=0; i<dotCount; i++) {
     push();
-    fill(220);
     rotate((frameCount*wheelSpeed)+(-i*dotSpacing));
-    translate(0,75);
+    translate(0,wheelDiameter);
     if((frameCount*wheelSpeed)+(-i*dotSpacing)<=720&&(frameCount*wheelSpeed)+(-i*dotSpacing)>0) {
       circle(0,0,dotSize);
     }

@@ -109,7 +109,7 @@ function statsText() {
 }
 
 function draw() {
-  frameRate(10);
+  frameRate(60);
   background(220);
   drawRectangles(height/4,time1);
   drawRectangles(height/2,time2);
@@ -121,7 +121,7 @@ function draw() {
   time2+=speed;
   time3+=speed*2
 
-  if(time3>1.7e309){ // hahahahahahahahaha
+  if(time3>1.7e309){ // hahaha
     time1=0;
     time2=0;
     time3=0;
