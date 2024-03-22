@@ -5,10 +5,10 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let wheelDiameter = 30;
+let wheelDiameter = 35;
 let debugOutline = false;
 let wheelSpeed = 175;
-let dotSize = 12;
+let dotSize = 10;
 let dotCount = 6;
 let dotSpacing = 30;
 function setup() {
@@ -16,7 +16,9 @@ function setup() {
   rectMode(CENTER);
   angleMode(DEGREES);
   textAlign(CENTER);
-  textSize(30);
+  textSize(35);
+  textFont('arial')
+  
   wheelSpeed = map(wheelSpeed,-255,255,-4,4);
 }
 
@@ -38,8 +40,8 @@ function mouseWheel() {
 function loadingWheel() {
   fill(220);
   push();
-  translate(width/2,height/1.5);
-  text('Just a moment...',0,125);
+  translate(width/2,height/2);
+  text('Just a moment...',0,150);
   //noFill();
   if(debugOutline===true){circle(0,0,wheelDiameter);}
   for(let i=0; i<dotCount; i++) {
