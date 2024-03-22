@@ -15,10 +15,12 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   angleMode(DEGREES);
   getCurrentTime();
+  textAlign(CENTER);
+  textSize(40);
 }
 
 function draw() {
-  background(220);
+  background(50,125,200);
   if(state===0) {
     clockOption1(width/2,height/2);
   } else if(state===1) {
@@ -33,7 +35,7 @@ function clockOption1(x,y) { // Smooth Seconds Hand. Re grabs true time every mi
   hourHand(x,y);
   minuteHand(x,y);
   secondsHand(x,y);
-  if(((frameCount/10)+clockSeconds)>=360) {
+  if((frameCount%60)===0) {
     getCurrentTime();
     frameCount=0;
   }
@@ -58,6 +60,11 @@ function keyPressed() {
   } else if(keyCode===SHIFT&&state===1) {
     state=0;
   }
+
+  if(keyCode===CONTROL) {
+    getCurrentTime();
+    frameCount = 0;
+  }
 }
 
 
@@ -76,15 +83,24 @@ function drawClock(clockCentreX,clockCentreY) {
   let lineLength;
 
   for(let i=1; i<=60; i++) { // Draws 60 evenly spaced lines around the clock face.
+    push();
+    rotate((6*i));
     if(i%5==0) { // 12 evenly distributed between the 60 are made as thicker, longer Hour Lines.
+      strokeWeight(0);
+      stroke(0);
+      push();
+      translate(0,-170);
+      rotate(-(6*i));
+      fill(30,70,50);
+      text((i/5),0,15);
+      pop();
       strokeWeight(10);
       lineLength=25;
     } else { // Any that aren't the 12 Hour Lines are drawn thinner and shorter.
       strokeWeight(4);
+      stroke(100,20,20);
       lineLength=20;
     }
-    push();
-    rotate((6*i));
     line(0,(215-lineLength/2),0,(215+lineLength/2));
     pop();
   }
@@ -95,20 +111,25 @@ function drawClock(clockCentreX,clockCentreY) {
 function secondsHand(clockCentreX,clockCentreY) {
   stroke(255,0,0);
   fill(255,0,0);
-  strokeWeight(2);
+  strokeWeight(3);
   push();
   translate(clockCentreX, clockCentreY);
-  circle(0,0,8)
+  circle(0,0,12)
   rotate((frameCount/10)+180+clockSeconds);
-  line(0,-20,0,215);
+  line(0,-30,0,215);
+  strokeWeight(7);
+  line(0,-30,0,-65);
+  stroke(255,210,0);
+  circle(0,0,1)
   pop();
 }
 
 function minuteHand(clockCentreX,clockCentreY) {
   stroke(0);
-  strokeWeight(4);
+  strokeWeight(5);
   push();
   translate(clockCentreX, clockCentreY);
+  circle(0,0,12)
   rotate((frameCount/600)+180+clockMinutes);
   line(0,-20,0,190);
   pop();
@@ -116,11 +137,12 @@ function minuteHand(clockCentreX,clockCentreY) {
 
 function hourHand(clockCentreX,clockCentreY) {
   stroke(0);
-  strokeWeight(6);
+  strokeWeight(7);
   push();
   translate(clockCentreX, clockCentreY);
+  circle(0,0,12)
   rotate((frameCount/7200)+180+clockHours);
-  line(0,-20,0,145);
+  line(0,-20,0,135);
   pop();
 }
 
