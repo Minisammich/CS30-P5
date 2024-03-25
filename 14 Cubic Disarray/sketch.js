@@ -12,6 +12,7 @@ function setup() {
   rectMode(CENTER);
   angleMode(DEGREES)
   noFill();
+  //noStroke();
 
   drawDisarray();
 }
@@ -27,6 +28,7 @@ function drawDisarray() {
       let rAmount = (map(y,0,height,0,45));
       let offset = map(y,0,height,0,15);
       rotate(random(-rAmount,rAmount));
+      fill(random(0,255),random(0,255),random(0,255));
       square(random(-offset,offset),random(-offset,offset),gridSpacing);
       pop();
     }
