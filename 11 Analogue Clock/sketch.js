@@ -20,7 +20,7 @@ function setup() {
 }
 
 function draw() {
-  background(15,125,200);
+  background(50,125,200);
   if(state===0) {
     clockOption1(width/2,height/2);
   } else if(state===1) {

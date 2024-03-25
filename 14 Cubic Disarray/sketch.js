@@ -6,21 +6,42 @@
 // - describe what you did to take this project "above and beyond"
 
 let gridSpacing = 20;
+let strokeEnabled = true;
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   rectMode(CENTER);
   angleMode(DEGREES)
   noFill();
-  //noStroke();
 
   drawDisarray();
 }
 
+function mousePressed() {
+  if(mouseButton===LEFT) {
+    drawDisarray();
+  } else if(mouseButton===CENTER) {
+    if(strokeEnabled===true) {
+      strokeEnabled = false;
+    } else {
+      strokeEnabled = true;
+    }
+    drawDisarray();
+  } 
+}
+
 function draw() {
+  //drawDisarray();
 }
 
 function drawDisarray() {
+  background(220);
+  if(strokeEnabled) {
+    stroke(0);
+  } else {
+    noStroke();
+  }
   for(let x=gridSpacing/2; x<width; x+=gridSpacing) {
     for(let y=gridSpacing/2; y<height; y+=gridSpacing) {
       push();
@@ -33,4 +54,4 @@ function drawDisarray() {
       pop();
     }
   }
-}
+} 

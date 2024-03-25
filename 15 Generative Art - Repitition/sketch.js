@@ -44,7 +44,7 @@ function randomElement_2(currLen) {
 }
 
 function draw() {
-  frameRate(10);
+  frameRate(8);
   //translate(width/2,height/2);
   background(200);
   for(let i=0; i<5000; i++) {
