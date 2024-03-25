@@ -18,7 +18,6 @@
 
 let rectWidth = 2, initialTerrainVariation = 25, initialSpeed = 150; // User Adjustable Variables.
 let drawStats = true; // Draws above variables on the top left of the canvas.
-
 let x = 0;
 let initialTime1, initialTime2, initialTime3; // Initial times to randomize starting positions of each z layer.
 let time1, time2, time3, colTime=0;
@@ -26,7 +25,6 @@ let direction = 'Positive'; // Sets direction of motion of the terrain.
 let heightList = [];
 let totalHeight = 0;
 let iAtMaxHeight=0; // Position in heightList at highest rectangle.
-
 let colourBrightnessRandomizer = []; // List to store randomized max values for rColList.
 let rgbSel = []; // Stores values for whether R, G, or B will be affected by rectHeight.
 let rColList = []; // Stores value for rectangle colour based on noise(colTime).
@@ -101,30 +99,30 @@ function randomizeColours(refresh) {
   colTime+=0.001;
   let colNoiseSeed = colTime;
   for(let i=0; i<9; i++) {
-    rColList.push(map(noise(colNoiseSeed),0,1,0,colourBrightnessRandomizer[i]));
+    rColList.push(map(noise(colNoiseSeed),0,1,0,colourBrightnessRandomizer[i])); // Maps a noise value to each RGB for each Z layer based on max brightness.
     colNoiseSeed+=15;
   }
 }
 
 
-function avgLine() {
+function avgLine() { // Draws the line of median height of all the rectangles per Z layer.
   let avgHeight = (totalHeight/(width/rectWidth));
   stroke(255,50,100);
   line(0,avgHeight,width,avgHeight);
   totalHeight=0;
 }
 
-function flag() {
+function flag() { // Draws a flag on the rectangle of peak height.
   let xFlag = (iAtMaxHeight)+(rectWidth/2);
   let yFlag = min(heightList);
   stroke(0);
-  line(xFlag,yFlag,xFlag,yFlag-50);
+  line(xFlag,yFlag,xFlag,yFlag-50); // Flag pole.
   fill(70,255,90);
   stroke(70,255,90);
-  triangle(xFlag,yFlag-30,xFlag,yFlag-50,xFlag+20,yFlag-40);
+  triangle(xFlag,yFlag-30,xFlag,yFlag-50,xFlag+20,yFlag-40); // Flag.
 }
 
-function drawRectangles(drawHeight,time,z) {
+function drawRectangles(drawHeight,time,z) { // Main code for drawing the terrain.
   let rectHeight, terrainNoise;
   x=time;
   heightList=[];
@@ -132,8 +130,8 @@ function drawRectangles(drawHeight,time,z) {
   for(let i=0; i<width; i+=rectWidth) {
     x+=terrainVariation;
     terrainNoise = noise(x);
-    rectHeight = map(terrainNoise,0,1,drawHeight,0);
-    rectColour = map(rectHeight,drawHeight,0,0,250);
+    rectHeight = map(terrainNoise,0,1,drawHeight,0); // Maps noise value from (0 to 1) to (drawheight to 0).
+    rectColour = map(rectHeight,drawHeight,0,0,250); // Maps the rectColour based on how tall the rectangle is (Tall means Brighter).
     heightList.push(rectHeight);
 
     totalHeight += rectHeight;
@@ -142,7 +140,7 @@ function drawRectangles(drawHeight,time,z) {
     }
 
     let rVal=0, gVal=0, bVal=0;
-    if(rgbSel[z]===0) {
+    if(rgbSel[z]===0) { // Determines whether R, G, or B will be affected by rectColour, the others will be random.
       rVal = map((rectColour+rColList[z]),0,500,0,255);
       gVal = rColList[z+3];
       bVal = rColList[z+6]
@@ -166,7 +164,7 @@ function drawRectangles(drawHeight,time,z) {
   flag();
 }
 
-function statsText() {
+function statsText() { // Draws text on the top left to display the user adjustable variables.
   let x = width/128, y = height/64;
   fill(0);
   stroke(0);
@@ -178,15 +176,17 @@ function statsText() {
 
 function draw() {
   frameRate(60);
-  randomizeColours(false);
+  randomizeColours(false); // Randomizes colours, but does NOT refresh lists.
   background(30,70,200);
-  drawRectangles(height/4,time1,0);
-  drawRectangles(height/2,time2,1);
-  drawRectangles(height/0.8,time3,2);
-  if(drawStats===true) {
+  drawRectangles(height/4,time1,0); // Rear Z layer (0)
+  drawRectangles(height/2,time2,1); // Middle Z layer (1)
+  drawRectangles(height/0.8,time3,2); // Front Z layer (2)
+
+  if(drawStats===true) { // Only draws stats text if true (allows it to be disabled easily if wanted).
     statsText();
   }
-  if(direction==='Positive') {
+
+  if(direction==='Positive') { // Determines whether the animation should play forwards or reverse.
     time1+=speed/2;
     time2+=speed;
     time3+=speed*2
