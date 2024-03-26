@@ -11,11 +11,11 @@ function setup() {
   background(200);
   angleMode(DEGREES);
   stroke(0,80);
-  //noLoop();
+  noLoop();
 }
 
 function randomElement(currLen) {
-  stroke(170,255,231);
+  //stroke(170,255,231);
   push(); // Isolate coordinate transformations.
   rotate(random(0,360));
 
@@ -44,10 +44,10 @@ function randomElement_2(currLen) {
 }
 
 function draw() {
-  frameRate(8);
-  //translate(width/2,height/2);
+  frameRate(60);
+  translate(width/2,height/2);
   background(200);
-  for(let i=0; i<5000; i++) {
-    randomElement_2(random(75,175));
+  for(let i=0; i<500; i++) {
+    randomElement(random(0,75));
   }
 }
