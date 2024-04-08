@@ -24,7 +24,7 @@ function spawnBall(initialX,initialY) {
   let ball = {
     x: initialX,
     y: initialY,
-    diameter: 130,
+    diameter: 30,
     xSpeed: random(-5,5),
     ySpeed: random(-5,5),
     colour: [random(0,255),random(0,255),random(0,255)],
