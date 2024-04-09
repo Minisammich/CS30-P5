@@ -4,9 +4,9 @@
 
 let ballArray = [];
 let showBallText = true;
-let chaosMode = false;
+let chaosMode = true;
 let ballDecayMode = false;
-let physicsMode = true;
+let physicsMode = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
