@@ -4,9 +4,9 @@
 
 let ballArray = [];
 let showBallText = true;
-let chaosMode = false;
+let chaosMode = true;
 let ballDecayMode = false;
-let physicsMode = true;
+let physicsMode = false;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -24,7 +24,7 @@ function spawnBall(initialX,initialY) {
   let ball = {
     x: initialX,
     y: initialY,
-    diameter: 130,
+    diameter: 30,
     xSpeed: random(-5,5),
     ySpeed: random(-5,5),
     colour: [random(0,255),random(0,255),random(0,255)],
