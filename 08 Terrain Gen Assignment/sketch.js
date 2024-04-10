@@ -105,7 +105,7 @@ function randomizeColours(refresh) {
 }
 
 
-function avgLine() { // Draws the line of median height of all the rectangles per Z layer.
+function avgLine() { // Draws the line of mean height of all the rectangles per Z layer.
   let avgHeight = (totalHeight/(width/rectWidth));
   stroke(255,50,100);
   line(0,avgHeight,width,avgHeight);
