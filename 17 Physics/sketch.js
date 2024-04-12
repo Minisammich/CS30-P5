@@ -8,6 +8,10 @@
 let physicsObjects = [];
 let shapeState = "rect";
 
+let launchModifierState = "y";
+let launchYSpeed = -10;
+let launchXSpeed = 0;
+
 function setup() {
   document.addEventListener("contextmenu", event => event.preventDefault())
   createCanvas(windowWidth, windowHeight);
@@ -27,6 +31,8 @@ function draw() {
   } else if(shapeState === "triangle") {
     // Yeah maybe I'll get around to this haha...
   }
+
+  launchArrow(mouseX,mouseY);
   
   // Loop through the objects array.
   for(i = 0; i < physicsObjects.length; i++) {
@@ -43,6 +49,21 @@ function draw() {
   }
 }
 
+function launchArrow(x,y) {
+  let xOffset = x+launchXSpeed; let yOffset = y+launchYSpeed;
+  fill(0);
+  stroke(0);
+  if(yOffset > y+10 || yOffset < y-10) {
+    if(yOffset < y) {
+      line(x,y,xOffset,yOffset);
+      triangle(xOffset,yOffset,xOffset-5,yOffset+10,xOffset+5,yOffset+10);
+    } else {
+      line(x,y,xOffset,yOffset);
+      triangle(xOffset,yOffset,xOffset-5,yOffset-10,xOffset+5,yOffset-10);
+    }
+  }
+}
+
 
 function keyPressed() {
 
@@ -55,13 +76,23 @@ function keyPressed() {
     }
   }
 
+
+  if(keyCode === 17) {
+    if(launchModifierState === "y") {
+      launchModifierState = "x";
+    } else if(launchModifierState === "x") {
+      launchModifierState = "y";
+    }
+  }
+
 }
 
 function mousePressed() {
 
   // Spawns new PhysicsObject of shape selected.
   if(mouseButton===CENTER) {
-    physicsObjects.push(new PhysicsObject(mouseX,mouseY,50,color(random(255),random(255),random(255)),shapeState));
+    let c = color(random(255),random(255),random(255));
+    physicsObjects.push(new PhysicsObject(mouseX,mouseY,50,c,shapeState,launchXSpeed,launchYSpeed));
   }
 
   // Loops through objects array
@@ -82,10 +113,22 @@ function mouseReleased() {
   }
 }
 
+function mouseWheel() {
+
+  let mWheel = (event.delta/75);
+
+  if(launchModifierState === "y") {
+    launchYSpeed += mWheel;
+  } else if(launchModifierState === "x") {
+    launchXSpeed += mWheel;
+  }
+
+  console.log(launchYSpeed,launchXSpeed);
+}
 
 class PhysicsObject {
 
-  constructor(x,y,size,colour,shape) {
+  constructor(x,y,size,colour,shape, xSpeed, ySpeed) {
     // Position.
     this.x = x; this.y = y; this.offX = 0; this.offY = 0;
     
@@ -93,7 +136,8 @@ class PhysicsObject {
     this.pickedUp = false; this.size = size; this.colour = colour; this.shape = shape;
 
     // Motion.
-    this.ySpeed = 0; // Speed in the y direction. (Pixels per Frame ==> px/F)
+    this.xSpeed = xSpeed; // Speed in the y direction. (Pixels per Frame ==> px/F)
+    this.ySpeed = ySpeed; // Speed in the y direction. (Pixels per Frame ==> px/F)
     this.yAccel = 1.5; // Acceleration in the y direction (px/F²).
     this.bounce = 0.25; // Amount of energy retained on collision (1 = 100%).
   }
