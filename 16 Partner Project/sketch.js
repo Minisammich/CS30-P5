@@ -1,9 +1,6 @@
 // OOP Pair Programming
 // Jeffrey Hamilton
 // 11/Apr/24
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
 
 let enterprise;
 let shipImage, bulletImage;
