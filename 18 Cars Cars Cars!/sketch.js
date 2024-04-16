@@ -12,8 +12,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   rectMode(CORNERS);
   noStroke();
-  for(let i = 0; i < 20; i++) {
-    cars.push(new Car(random(0,width)));
+  for(let i = 0; i < 1; i++) {
+    cars.push(new Car(random(0,width),-1));
   }
 }
 
@@ -30,6 +30,17 @@ function draw() {
   }
 }
 
+function mousePressed() {
+  if(mouseButton === LEFT && keyCode === 16){
+    cars.push(new Car(mouseX,50));
+  } else {
+    cars.push(new Car(mouseX,0));
+  }
+}
+
+function keyPressed() {
+}
+
 function road() {
   rectMode(CORNERS);
   rect(0,height*0.2,width,height*0.8);
@@ -40,8 +51,11 @@ function road() {
 }
 
 class Car {
-  constructor(x) {
-    let lane = round(random(50));
+  constructor(x,lane) {
+    if(lane === -1) {
+      lane = round(random(50));
+    }
+
     if(lane < 25) {
       this.lane = "eastbound";
     } else {
@@ -119,16 +133,26 @@ class Car {
       this.x = 0;
     }
   }
-  
-  update() {
-    let choice = random(200);
-    if(choice === 13) {
-      this.speed = random(10);
-    } else if(choice > 55 && choice < 60){
-      this.speed = random(1,4);
-    } else if(choice < 1) {
-      this.speed = 0;
-    } 
+
+  update() { 
+    if((int(random(99)) === 0) && this.speed+1 < 6) {
+      this.speed += 1;
+    } else if((int(random(99)) === 0) && this.speed-1 >= 0) {
+      this.speed -= 1;
+    } else if((int(random(99)) === 0)) {
+      this.colour = color(random(255),random(255),random(255));
+    }
   }
+  
+  // update() {
+  //   let choice = random(500);
+  //   if(choice === 13) {
+  //     this.speed = random(10);
+  //   } else if(choice > 55 && choice < 60){
+  //     this.speed = random(1,4);
+  //   } else if(choice < 0.5) {
+  //     this.speed = 0;
+  //   } 
+  // }
   
 }
