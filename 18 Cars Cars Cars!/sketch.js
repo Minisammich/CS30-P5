@@ -7,8 +7,10 @@
 
 
 let cars = [];
+let trafficLights = [];
 
 function setup() {
+  document.addEventListener("contextmenu", event => event.preventDefault())
   createCanvas(windowWidth, windowHeight);
   rectMode(CORNERS);
   noStroke();
@@ -28,17 +30,53 @@ function draw() {
     car.move();
     car.update();
   }
+  for(let i = 0; i < trafficLights.length; i++) {
+    let light = trafficLights[i];
+    light.display();
+  }
 }
 
 function mousePressed() {
   if(mouseButton === LEFT && keyCode === 16){
+    // Spawn car in Westbound lane.
     cars.push(new Car(mouseX,50));
-  } else {
+  } else if(mouseButton === LEFT){
+    // Spawn car in Eastbound lane.
     cars.push(new Car(mouseX,0));
   }
+
+  if(mouseButton === RIGHT) {
+    // Spawn Traffic Light for Westbound lane.
+    if(mouseY < height/2) {
+      trafficLights.push(new TrafficLight(mouseX,0));
+    } else if(mouseY > height/2) {
+      trafficLights.push(new TrafficLight(mouseX,1));
+    }
+  } 
+
+  if(mouseButton === CENTER) { // Deletes traffic light when middle click is pressed while over a light.
+    for(let i = 0; i < trafficLights.length; i++) {
+      let light = trafficLights[i];
+      let pos = light.position();
+      let mouseOverLane;
+
+      if(mouseY < height/2) { // Checks which lane the mouse is over.
+        mouseOverLane = 0;
+      } else {
+        mouseOverLane = 1;
+      }
+
+      if((mouseX < pos[0]+10) && (mouseX > pos[0]-10) && (mouseOverLane === pos[1])) {
+        trafficLights.splice(i,1);
+      }
+
+    }
+  }
+
 }
 
-function keyPressed() {
+function keyReleased() {
+  keyCode = 0;
 }
 
 function road() {
@@ -47,6 +85,31 @@ function road() {
   for(i = 0; i < width; i += 150) {
     fill(200,200,50);
     rect(i,(height/2 + 5), i+70, (height/2 - 5));
+  }
+}
+
+class TrafficLight {
+  constructor(x,lane) {
+    this.x = x;
+    this.lane = lane;
+  }
+
+  display() {
+    if(this.lane === 0) {
+      rect(this.x,height*0.2,20,30);
+    } else if(this.lane === 1) {
+      rect(this.x,height*0.8,20,30);
+    }
+
+  }
+
+  cycle() {
+
+  }
+
+  position() {
+    let posArray = [this.x,this.lane];
+    return(posArray);
   }
 }
 
@@ -143,16 +206,4 @@ class Car {
       this.colour = color(random(255),random(255),random(255));
     }
   }
-  
-  // update() {
-  //   let choice = random(500);
-  //   if(choice === 13) {
-  //     this.speed = random(10);
-  //   } else if(choice > 55 && choice < 60){
-  //     this.speed = random(1,4);
-  //   } else if(choice < 0.5) {
-  //     this.speed = 0;
-  //   } 
-  // }
-  
 }
