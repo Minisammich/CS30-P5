@@ -26,9 +26,7 @@ function draw() {
   road();
   for(let i = 0; i < cars.length; i++) {
     let car = cars[i];
-    car.display();
-    car.move();
-    car.update();
+    car.action();
   }
   for(let i = 0; i < trafficLights.length; i++) {
     let light = trafficLights[i];
@@ -46,10 +44,11 @@ function mousePressed() {
   }
 
   if(mouseButton === RIGHT) {
-    // Spawn Traffic Light for Westbound lane.
     if(mouseY < height/2) {
+      // Spawn Traffic Light for Westbound lane.
       trafficLights.push(new TrafficLight(mouseX,0));
     } else if(mouseY > height/2) {
+      // Spawn Traffic Light for Eastbound lane.
       trafficLights.push(new TrafficLight(mouseX,1));
     }
   } 
@@ -100,11 +99,9 @@ class TrafficLight {
     } else if(this.lane === 1) {
       rect(this.x,height*0.8,20,30);
     }
-
   }
 
   cycle() {
-
   }
 
   position() {
@@ -205,5 +202,11 @@ class Car {
     } else if((int(random(99)) === 0)) {
       this.colour = color(random(255),random(255),random(255));
     }
+  }
+
+  action() {
+    this.display();
+    this.move();
+    this.update();
   }
 }
