@@ -94,11 +94,17 @@ class TrafficLight {
   }
 
   display() {
+    push();
     if(this.lane === 0) {
-      rect(this.x,height*0.2,20,30);
+      translate(this.x,height*0.2);
     } else if(this.lane === 1) {
-      rect(this.x,height*0.8,20,30);
+      translate(this.x,height*0.8);
+      rotate(PI);
     }
+
+    rect(0,0,20,30);
+    circle(5,0,15);
+    pop();
   }
 
   cycle() {
