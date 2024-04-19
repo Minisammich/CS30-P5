@@ -8,8 +8,10 @@
 let physicsObjects = [];
 let shapeState = "rect";
 
-let launchModifierState = "y";
-let launchYSpeed = -10;
+const y = 0, x = 1;
+
+let launchModifierState = y;
+let launchYSpeed = -15;
 let launchXSpeed = 0;
 
 function setup() {
@@ -78,10 +80,10 @@ function keyPressed() {
 
 
   if(keyCode === 17) {
-    if(launchModifierState === "y") {
-      launchModifierState = "x";
-    } else if(launchModifierState === "x") {
-      launchModifierState = "y";
+    if(launchModifierState === y) {
+      launchModifierState = x;
+    } else if(launchModifierState === x) {
+      launchModifierState = y;
     }
   }
 
@@ -117,9 +119,9 @@ function mouseWheel() {
 
   let mWheel = (event.delta/75);
 
-  if(launchModifierState === "y") {
+  if(launchModifierState === y) {
     launchYSpeed += mWheel;
-  } else if(launchModifierState === "x") {
+  } else if(launchModifierState === x) {
     launchXSpeed += mWheel;
   }
 

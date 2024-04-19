@@ -13,6 +13,7 @@ function setup() {
   document.addEventListener("contextmenu", event => event.preventDefault())
   createCanvas(windowWidth, windowHeight);
   rectMode(CORNERS);
+  angleMode(DEGREES);
   noStroke();
   for(let i = 0; i < 1; i++) {
     cars.push(new Car(random(0,width),-1));
@@ -95,17 +96,32 @@ class TrafficLight {
 
   display() {
     push();
+
+    let xOff = 3;
     if(this.lane === 0) {
       translate(this.x,height*0.2);
+      quad(7,18,7,-18,-7,-20,-7,20);
+      quad(-7,-20,-7,20,-10,18,-10,-18);
     } else if(this.lane === 1) {
       translate(this.x,height*0.8);
-      rotate(PI);
+      quad(-7,18,-7,-18,7,-20,7,20);
+      quad(7,-20,7,20,10,18,10,-18);
+      xOff *= -1;
     }
 
-    rect(0,0,20,30);
-    circle(5,0,15);
+    fill(70); circle(1,-12,10);
+    fill(255,0,0); ellipse(xOff,-12,7,10);
+
+    fill(70); circle(1,0,10);
+    fill(255,255,0); ellipse(xOff,0,7,10);
+
+    fill(70); circle(1,12,10);
+    fill(0,255,0); ellipse(xOff,12,7,10);
+
+
     pop();
   }
+
 
   cycle() {
   }
