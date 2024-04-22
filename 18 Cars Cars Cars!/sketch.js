@@ -15,7 +15,7 @@ function setup() {
   rectMode(CORNERS);
   angleMode(DEGREES);
   noStroke();
-  for(let i = 0; i < 1; i++) {
+  for(let i = 0; i < 10; i++) {
     cars.push(new Car(random(0,width),-1));
   }
 }
@@ -27,18 +27,37 @@ function draw() {
   road();
   for(let i = 0; i < cars.length; i++) {
     let car = cars[i];
-    car.action();
+    let lightState, lightPos, lightLane;
+    let carPos = car.position(0);
+    let carLane = car.position(1);
+
+    for(let light of trafficLights) {
+      lightState = light.returnState();
+      lightPos = light.position(0);
+      lightLane = light.position(1);
+    }
+
+    if((carLane === lightLane) && (lightPos != 2)) {
+      if(carLane === 0) {
+        
+      }
+    } else {
+      car.action();
+    }
   }
   for(let i = 0; i < trafficLights.length; i++) {
     let light = trafficLights[i];
     light.display();
+    if(frameCount % 120 === 0) {
+      light.cycle();
+    }
   }
 }
 
 function mousePressed() {
   if(mouseButton === LEFT && keyCode === 16){
     // Spawn car in Westbound lane.
-    cars.push(new Car(mouseX,50));
+    cars.push(new Car(mouseX,1));
   } else if(mouseButton === LEFT){
     // Spawn car in Eastbound lane.
     cars.push(new Car(mouseX,0));
@@ -92,6 +111,7 @@ class TrafficLight {
   constructor(x,lane) {
     this.x = x;
     this.lane = lane;
+    this.state = 2;
   }
 
   display() {
@@ -101,22 +121,25 @@ class TrafficLight {
     if(this.lane === 0) {
       translate(this.x,height*0.2);
       quad(7,18,7,-18,-7,-20,-7,20);
-      quad(-7,-20,-7,20,-10,18,-10,-18);
+      quad(-7,-20,-7,20,-13,18,-13,-18);
     } else if(this.lane === 1) {
       translate(this.x,height*0.8);
       quad(-7,18,-7,-18,7,-20,7,20);
-      quad(7,-20,7,20,10,18,10,-18);
+      quad(7,-20,7,20,13,18,13,-18);
       xOff *= -1;
     }
 
     fill(70); circle(1,-12,10);
-    fill(255,0,0); ellipse(xOff,-12,7,10);
+    if(this.state === 0) {fill(255,0,0);} else {fill(75,0,0);} 
+    ellipse(xOff,-12,7,10);
 
     fill(70); circle(1,0,10);
-    fill(255,255,0); ellipse(xOff,0,7,10);
+    if(this.state === 1) {fill(255,255,0);} else {fill(75,75,0);}  
+    ellipse(xOff,0,7,10);
 
     fill(70); circle(1,12,10);
-    fill(0,255,0); ellipse(xOff,12,7,10);
+    if(this.state === 2) {fill(0,255,0);} else {fill(0,75,0);} 
+    ellipse(xOff,12,7,10);
 
 
     pop();
@@ -124,21 +147,35 @@ class TrafficLight {
 
 
   cycle() {
+    if(this.state === 0) {
+      this.state = 2;
+    } else if(this.state === 2) {
+      this.state = 1;
+    } else if(this.state = 1) {
+      this.state = 0;
+    }
   }
 
-  position() {
-    let posArray = [this.x,this.lane];
-    return(posArray);
+  returnState() {
+    return(this.state);
+  }
+
+  position(k) {
+    if(k === 0) {
+      return(this.x);
+    } else if(k === 1) {
+      return(this.lane);
+    }
   }
 }
 
 class Car {
   constructor(x,lane) {
     if(lane === -1) {
-      lane = round(random(50));
+      lane = round(random(1));
     }
 
-    if(lane < 25) {
+    if(lane === 0) {
       this.lane = "eastbound";
     } else {
       this.lane = "westbound";
@@ -230,5 +267,13 @@ class Car {
     this.display();
     this.move();
     this.update();
+  }
+
+  position(k) {
+    if(k === 0) {
+      return(this.x);
+    } else if(k === 1) {
+      return(this.lane);
+    }
   }
 }
