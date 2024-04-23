@@ -39,7 +39,9 @@ function draw() {
 
     if((carLane === lightLane) && (lightPos != 2)) {
       if(carLane === 0) {
-        
+        if(carPos+25 >= lightPos) {
+          car.display();
+        }
       }
     } else {
       car.action();
