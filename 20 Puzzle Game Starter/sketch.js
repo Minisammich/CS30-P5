@@ -15,7 +15,9 @@
 
 let grid = [];
 let squareSize = 50;
-const NUM_ROWS = 10; const NUM_COLS = 10;
+const NUM_ROWS = 5; const NUM_COLS = 5;
+
+let winState = false;
 
 let row, col;
 
@@ -37,8 +39,19 @@ function draw() {
   drawGrid();
 }
 
-function mousePressed() {
-  flip(col,row);
+function mousePressed() { // Flip grid squares when mouse is pressed
+  if(mouseX < width && mouseY < height && mouseButton === LEFT){
+    flip(col,row); // Flip current square
+
+    if(col != NUM_COLS-1) flip(col+1,row); // Flip square to the RIGHT.
+
+    if(col != 0) flip(col-1,row); // Flip square to the LEFT.
+
+    if(row != NUM_ROWS-1) flip(col,row+1); // Flip square ABOVE.
+
+    if(row != 0) flip(col,row-1); // Flip square BELOW.
+
+  }
 }
 
 function flip(x,y) {
@@ -60,10 +73,22 @@ function getCurrentY() { // Determines current column of the mouse.
 }
 
 function drawGrid() {
+  let maxSquare = 0, minSquare = 255;
   for(let y = 0; y < NUM_ROWS; y++) {
     for(let x = 0; x < NUM_COLS; x++) {
+      let currSquare = grid[y][x];
+      if(currSquare > maxSquare) {
+        maxSquare = currSquare;
+      }
+      if(currSquare < minSquare) {
+        minSquare = currSquare;
+      }
       fill(map(grid[y][x],0,1,0,255));
       rect(x*squareSize,y*squareSize, squareSize);
+
+      if(minSquare === maxSquare) {
+        winState = true;
+      }
     }
   }
 
