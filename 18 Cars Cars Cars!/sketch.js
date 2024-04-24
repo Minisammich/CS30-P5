@@ -32,15 +32,18 @@ function draw() {
     let carLane = car.position(1);
 
     for(let light of trafficLights) {
-      lightState = light.returnState();
-      lightPos = light.position(0);
       lightLane = light.position(1);
+      if(lightLane === carLane) {
+        lightState = light.returnState();
+        lightPos = light.position(0);
+      }
     }
 
     if((carLane === lightLane) && (lightPos != 2)) {
       if(carLane === 0) {
         if(carPos+25 >= lightPos) {
           car.display();
+          car.update();
         }
       }
     } else {
@@ -50,9 +53,9 @@ function draw() {
   for(let i = 0; i < trafficLights.length; i++) {
     let light = trafficLights[i];
     light.display();
-    if(frameCount % 120 === 0) {
-      light.cycle();
-    }
+    // if(frameCount % 120 === 0) {
+    //   light.cycle();
+    // }
   }
 }
 
@@ -113,7 +116,7 @@ class TrafficLight {
   constructor(x,lane) {
     this.x = x;
     this.lane = lane;
-    this.state = 2;
+    this.state = 0;
   }
 
   display() {
@@ -178,11 +181,11 @@ class Car {
     }
 
     if(lane === 0) {
-      this.lane = "eastbound";
+      this.lane = 0;
     } else {
-      this.lane = "westbound";
+      this.lane = 1;
     }
-    if(this.lane === "eastbound") {
+    if(this.lane === 0) {
       this.x = x; this.y = height*(random(0.55,0.75));
     } else {
       this.x = x; this.y = height*(random(0.25,0.45));
@@ -201,7 +204,7 @@ class Car {
       rect(this.x,this.y,75,35);
       stroke(0);
 
-      if(this.lane === "eastbound") {
+      if(this.lane === 0) {
         fill(90);
         rect(this.x-15,this.y,40,30);
         fill(255,255,0);
@@ -218,7 +221,7 @@ class Car {
     } else if(this.state === 1) { // Truck.
       rect(this.x,this.y,105,45);
 
-      if(this.lane === "eastbound") {
+      if(this.lane === 0) {
         stroke(0);
         fill(20);
         rect(this.x-27,this.y,45,38);
@@ -243,15 +246,10 @@ class Car {
   }
   
   move() {
-    if(this.lane === "eastbound") {
+    if(this.lane === 0) {
       this.x += this.speed;
     } else {
       this.x -= this.speed;
-    }
-    if(this.x < 0) {
-      this.x = width;
-    } else if(this.x > width) {
-      this.x = 0;
     }
   }
 
@@ -269,6 +267,12 @@ class Car {
     this.display();
     this.move();
     this.update();
+
+    if(this.x < 0) {
+      this.x = width;
+    } else if(this.x > width) {
+      this.x = 0;
+    }
   }
 
   position(k) {
