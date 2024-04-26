@@ -18,6 +18,7 @@ let squareSize = 50;
 const NUM_ROWS = 5; const NUM_COLS = 5;
 
 let winState = false;
+let winBG = 0;
 
 let row, col;
 
@@ -84,7 +85,13 @@ function drawSelected(col,row) {
 }
 
 function drawWinText() {
-  fill(0,255,0);
+  if(winBG === 0) {
+    noStroke();
+    fill(0,255,0);
+  } else {
+    fill(100,255,0);
+    stroke(0);
+  }
   textSize(((NUM_COLS+NUM_ROWS)*squareSize)/10); 
   text("You Win!",width*0.5,height*0.5);
 
@@ -95,7 +102,7 @@ function drawWinText() {
 
 function flip(x,y) {
   if(grid[y][x] === 0) {
-    grid[y][x] = 255;
+    grid[y][x] = 1;
   } else {
     grid[y][x] = 0;
   }
@@ -121,7 +128,8 @@ function randomizeGrid() {
 }
 
 function drawGrid() {
-  let maxSquare = 0, minSquare = 255;
+  stroke(0);
+  let maxSquare = 0, minSquare = 1;
   for(let y = 0; y < NUM_ROWS; y++) {
     for(let x = 0; x < NUM_COLS; x++) {
       let currSquare = grid[y][x];
@@ -133,11 +141,11 @@ function drawGrid() {
       }
       fill(map(grid[y][x],0,1,0,255));
       rect(x*squareSize,y*squareSize, squareSize);
-
-      if(minSquare === maxSquare) {
-        winState = true;
-      } else { winState = false; }
     }
+    if(minSquare === maxSquare) {
+      winState = true;
+      winBG = minSquare;
+    } else { winState = false; }
   }
 
 }
