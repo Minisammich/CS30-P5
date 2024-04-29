@@ -85,17 +85,26 @@ function drawSelected(col,row) {
 }
 
 function drawWinText() {
+  let winTextColour, resetTextColour;
   if(winBG === 0) {
     noStroke();
-    fill(0,255,0);
+    fill(0);
+    rect(0,0,NUM_COLS*squareSize,NUM_ROWS*squareSize);
+    winTextColour = color(0,255,0);
+    resetTextColour = color(0,255,255);
   } else {
-    fill(100,255,0);
     stroke(0);
+    fill(255);
+    rect(0,0,NUM_COLS*squareSize,NUM_ROWS*squareSize);
+    winTextColour = color(100,200,0);
+    resetTextColour = color(255,0,255);
   }
+
+  fill(winTextColour);
   textSize(((NUM_COLS+NUM_ROWS)*squareSize)/10); 
   text("You Win!",width*0.5,height*0.5);
 
-  fill(0,255,255);
+  fill(resetTextColour);
   textSize(((NUM_COLS+NUM_ROWS)*squareSize)/30);
   text("Press SPACE to Reset",width*0.5,height*0.8);
 }
@@ -145,7 +154,9 @@ function drawGrid() {
     if(minSquare === maxSquare) {
       winState = true;
       winBG = minSquare;
-    } else { winState = false; }
+    } else {
+      winState = false;
+    }
   }
 
 }
