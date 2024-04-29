@@ -38,15 +38,30 @@ function draw() {
   
   // Loop through the objects array.
   for(i = 0; i < physicsObjects.length; i++) {
-    s = physicsObjects[i];
+    let s1 = physicsObjects[i];
+    let colliding = false;
 
-    s.display();
+    s1.display();
+    let s1X = s1.getPos[0] + s1.size, s1Y = s1.getPos[1] + s1.size;
+
+    for(j = 0; j < physicsObjects.length; j++) {
+      if(i !== j){
+        let s2 = physicsObjects[j];
+        if(s2.isInBounds(s1X,s1Y)) {
+          colliding = true;
+        }
+      }
+    }
+    
+    if(colliding) {
+      s1.xSpeed *= -1;
+    }
 
     // If object is picked up, move it with cursor, else use gravity.
-    if(s.isPickedUp()) {
-      s.move();
+    if(s1.isPickedUp()) {
+      s1.move();
     } else {
-      s.gravity();
+      s1.gravity();
     }
   }
 }
@@ -102,7 +117,7 @@ function mousePressed() {
     let s = physicsObjects[i];
     if(mouseButton===LEFT) {
       s.mousePressed(); // Calls classes mousePressed method if left click is pressed.
-    } else if(mouseButton === RIGHT&&s.isInBounds()) {
+    } else if(mouseButton === RIGHT&&s.isInBounds(mouseX,mouseY)) {
       physicsObjects.splice(i,1); // Deletes object if it is right clicked on.
       i--;
     }
@@ -199,11 +214,15 @@ class PhysicsObject {
     }
   }
 
-  isInBounds() {
+  isInBounds(x,y) {
     let radius = this.size/2;
-    if((mouseX<this.x+radius)&&(mouseX>this.x-radius)&&(mouseY<this.y+radius)&&(mouseY>this.y-radius)) {
+    if((x<this.x+radius)&&(x>this.x-radius)&&(y<this.y+radius)&&(y>this.y-radius)) {
       return true;
-    }
+    } else { return false; }
+  }
+
+  getPos() {
+    return([this.x,this.y]);
   }
 }
 
