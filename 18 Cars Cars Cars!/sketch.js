@@ -1,9 +1,6 @@
 // Project Title
 // Your Name
 // Date
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
 
 
 let cars = [];
@@ -53,9 +50,9 @@ function draw() {
   for(let i = 0; i < trafficLights.length; i++) {
     let light = trafficLights[i];
     light.display();
-    // if(frameCount % 120 === 0) {
-    //   light.cycle();
-    // }
+    if(frameCount % 120 === 0) {
+      light.cycle();
+    }
   }
 }
 
