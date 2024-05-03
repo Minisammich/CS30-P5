@@ -162,7 +162,7 @@ class PhysicsObject {
     this.xSpeed = xSpeed; // Speed in the y direction. (Pixels per Frame ==> px/F)
     this.ySpeed = ySpeed; // Speed in the y direction. (Pixels per Frame ==> px/F)
     this.yAccel = 1.5; // Acceleration in the y direction (px/F²).
-    this.bounce = 0.35; // Amount of energy retained on collision (1 = 100%).
+    this.bounce = 0.25; // Amount of energy retained on collision (1 = 100%).
   }
 
   display() {
