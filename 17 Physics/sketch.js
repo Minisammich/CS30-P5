@@ -6,10 +6,10 @@
 // - describe what you did to take this project "above and beyond"
 
 
-
-// MAJOR FLAWS:
 //
-// Array order affects function.
+// ~~~MAJOR FLAWS~~~
+//
+// Object array order affects the program's function.
 //
 // No X collisions or movement, only Y.
 //
@@ -18,6 +18,9 @@
 // Objects can be wedged together, explode outward when the object singularity is lifted then dropped.
 //
 // Bounce on collision with another object often cancelled.
+//
+// Overall very jittery
+//
 
 let physicsObjects = [];
 let shapeState = "rect";
@@ -162,7 +165,7 @@ class PhysicsObject {
     this.xSpeed = xSpeed; // Speed in the y direction. (Pixels per Frame ==> px/F)
     this.ySpeed = ySpeed; // Speed in the y direction. (Pixels per Frame ==> px/F)
     this.yAccel = 1.5; // Acceleration in the y direction (px/F²).
-    this.bounce = 0.25; // Amount of energy retained on collision (1 = 100%).
+    this.bounce = 0.35; // Amount of energy retained on collision (1 = 100%).
   }
 
   display() {
