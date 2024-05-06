@@ -48,7 +48,7 @@ function draw() {
 function mousePressed() {
   //requestPointerLock();
   if(mouseButton === CENTER) {
-    cubes.push(new Cube(camLX,camLY+400,camLZ-800, 0,0,0, 100));
+    cubes.push(new Cube(camLX,camLY,camLZ-800, 0,0,0, 100));
   }
 
   if(mouseButton === LEFT) {
@@ -90,7 +90,7 @@ function getMousePositions() {
   // mX += dMX;
   // mY += dMY;
   camYaw -= dMX/sensitivity;
-  camPitch += dMY/sensitivity;
+  camPitch -= dMY/sensitivity;
 }
 
 function camMovement() {
