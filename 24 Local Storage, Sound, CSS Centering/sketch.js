@@ -17,7 +17,7 @@ function setup() {
   textSize(60);
   textAlign(CENTER);
   pos = createVector(width/2,height/2);
-  vel = createVector(5,3);
+  vel = createVector(20,30);
 
   if(localStorage.getItem("bounce" === null)) {
     localStorage.setItem("bounce", 0);
