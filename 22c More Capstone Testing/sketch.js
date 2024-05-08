@@ -5,6 +5,7 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+//let elif = else\ if;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -13,3 +14,4 @@ function setup() {
 function draw() {
   background(220);
 }
+
