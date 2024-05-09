@@ -3,7 +3,7 @@
 // 06/May/2024
 
 function setup() {
-  createCanvas(30,20);
+  createCanvas(300,200);
   noFill();
 }
 
