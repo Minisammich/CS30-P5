@@ -23,6 +23,7 @@ function setup() {
 
 function draw() {
   background(220);
+  fill(255);
 
   player.move();
   for(w of walls) {

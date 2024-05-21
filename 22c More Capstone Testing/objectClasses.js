@@ -3,7 +3,7 @@ class Player {
       this.pos = createVector(x,y);
 
       this.speed = createVector(0,0);
-      this.moveSpeed = 1.5;
+      this.moveAccel = 1.5;
       this.speedDecay = 1.5;
       this.maxSpeed = 10;
 
@@ -13,6 +13,8 @@ class Player {
     }
   
     display() {
+      strokeWeight(2);
+      fill(255,0,255);
       rect(this.pos.x,this.pos.y,this.size.x,this.size.y); // Will be a sprite at some point.
     }
   
@@ -22,9 +24,9 @@ class Player {
         this.onFloor = false;
       }
       if(keyIsDown(65) && !keyIsDown(69)) {
-        if(this.speed.x > -this.maxSpeed) this.speed.x -= this.moveSpeed;
+        if(this.speed.x > -this.maxSpeed) this.speed.x -= this.moveAccel;
       } else if(keyIsDown(69) && !keyIsDown(65)) {
-        if(this.speed.x < this.maxSpeed) this.speed.x += this.moveSpeed;
+        if(this.speed.x < this.maxSpeed) this.speed.x += this.moveAccel;
       } else {
         if(this.speed.x > 0) this.speed.x -= this.speedDecay;
         if(this.speed.x < 0) this.speed.x += this.speedDecay;
@@ -74,6 +76,7 @@ class Player {
     }
   
     display() {
+      strokeWeight(1);
       rect(this.x,this.y,this.w,this.h);
       fill(255);
     }
