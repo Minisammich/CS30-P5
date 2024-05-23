@@ -1,0 +1,3 @@
+ - Player can fit through small gaps when the speed is high enough.
+
+ - Player may sometimes stick to ceilings when falling.

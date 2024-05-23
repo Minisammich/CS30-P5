@@ -2,11 +2,13 @@
 // Jeffrey Hamilton
 // 18/May/2024
 
+let bounce;
+
 let player;
 let walls = [];
 
 function preload() {
-
+  bounce = loadSound("assets/soundEffects/bounceSound.wav");
 }
 
 
@@ -14,6 +16,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   rectMode(CENTER);
   textAlign(CENTER);
+
+  bounce.setVolume(0.5);
 
   walls.push(new Wall(-25,height/2,50,height,true));
   walls.push(new Wall(width+25,height/2,50,height,true));
@@ -29,11 +33,16 @@ function setup() {
 }
 
 function draw() {
+  frameRate(60);
   background(220);
   fill(255);
 
   player.move();
 
+  if(player.graceFrames <=0) {
+    player.againstWall = false;
+    player.canJump = false;
+  }
   for(w of walls) {
     w.collision();
     w.display();
