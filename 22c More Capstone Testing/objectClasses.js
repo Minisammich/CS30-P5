@@ -77,17 +77,39 @@ class Player {
   }
   
 class Wall {
-    constructor(x,y,w,h,vis) {
+    constructor(x,y,w,h,vis,rotation,hasHB) {
       this.x = x, this.y = y, this.w = w, this.h = h;
+      this.rotation = rotation;
+
+      this.hasHitbox = round(hasHB);
       this.vis = vis;
     }
   
     display() {
+      push();
+      translate(this.x,this.y);
+      rotate(this.rotation);
       if(this.vis) {
         strokeWeight(1);
-        rect(this.x,this.y,this.w,this.h);
-        fill(255);
+        fill(fillColour);
+        let sizeX = 20, sizeY = 20;
+        for(let i = -this.w/2; i < this.w/2; i += sizeX) {
+          for(let j = -this.h/2; j < this.h/2; j += sizeY) {
+            if(i === -this.w/2) {
+              image(testTexture3,i,j);
+            } else if(i >= this.w/2-sizeX) {
+              image(testTexture4,i,j);
+            } else if(j === -this.h/2) {
+              image(testTexture1,i,j);
+            } else if(j >= this.h/2-sizeY) {
+              image(testTexture2,i,j)
+            } else {
+              image(testTexture0,i,j);
+            }
+          }
+        }
       }
+      pop();
     }
   
     collision() {
@@ -96,7 +118,7 @@ class Wall {
   
       let collideLeft = playerPos.x + playerSize.x/2+1 > this.x - this.w/2; 
       let collideRight = playerPos.x - playerSize.x/2-1 < this.x + this.w/2;
-      let collideTop = playerPos.y + playerSize.y/2 > this.y - this.h/2;
+      let collideTop = playerPos.y + playerSize.y/2 > (this.y) - this.h/2;
       let collideBottom = playerPos.y - playerSize.y/2 < this.y + this.h/2;
   
       let distToBot = dist(0,this.y+this.h/2,0,playerPos.y-playerSize.y/2);
@@ -105,7 +127,7 @@ class Wall {
       let distToLeft = dist(this.x-this.w/2,0,playerPos.x+playerSize.x/2,0);
   
       if(collideTop && collideBottom && collideLeft && collideRight) {
-        fill(0,255,0);
+        fillColour = color(0,255,0);
         player.graceFrames = 5;
 
         if(distToBot < distToTop) {
@@ -132,7 +154,7 @@ class Wall {
           player.speed.y = 0;
           player.canJump = true;
           player.jumpCounter = 2;
-          player.moveTo(playerPos.x,this.y-this.h/2-playerSize.y/2);
+          player.moveTo(playerPos.x,(this.y)-this.h/2-playerSize.y/2);
         } else {
           player.canJump = true;
           player.againstWall = true;
@@ -148,5 +170,4 @@ class Wall {
         }
       }
     }
-
   }
