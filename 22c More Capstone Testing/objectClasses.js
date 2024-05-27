@@ -83,6 +83,8 @@ class Wall {
 
       this.hasHitbox = round(hasHB);
       this.vis = vis;
+
+      this.topTextureArray = [];
     }
   
     display() {
@@ -92,24 +94,47 @@ class Wall {
       if(this.vis) {
         strokeWeight(1);
         fill(fillColour);
-        let sizeX = 20, sizeY = 20;
+        let sizeX = 19, sizeY = 19;
+
         for(let i = -this.w/2; i < this.w/2; i += sizeX) {
           for(let j = -this.h/2; j < this.h/2; j += sizeY) {
+
             if(i === -this.w/2) {
-              image(testTexture3,i,j);
+              if(j !== -this.h/2) {
+                image(baseTexture0,i,j);
+              } else {
+                let num = 0;
+                this.topTexture(i,j,num);
+              }
+
             } else if(i >= this.w/2-sizeX) {
-              image(testTexture4,i,j);
+              if(j !== -this.h/2) {
+                image(baseTexture0,i,j);
+              } else {
+                let num = 0;
+                this.topTexture(i,j,num);
+              }
+
             } else if(j === -this.h/2) {
-              image(testTexture1,i,j);
+              let num = 0;
+              this.topTexture(i,j,num);
+
             } else if(j >= this.h/2-sizeY) {
-              image(testTexture2,i,j)
+              image(baseTexture0,i,j);
+
             } else {
-              image(testTexture0,i,j);
+              image(baseTexture0,i,j);
             }
           }
         }
       }
       pop();
+    }
+
+    topTexture(i,j,num) {
+      if(num === 0) image((topTexture0),i,j);
+      if(num === 1) image((topTexture1),i,j);
+      if(num === 2) image((topTexture2),i,j);
     }
   
     collision() {
