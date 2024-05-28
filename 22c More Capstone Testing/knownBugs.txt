@@ -1,0 +1,10 @@
+ - Player can fit through small gaps when the speed is high enough.
+
+ - Player may sometimes stick to ceilings when falling.
+
+ - Player can stick to walls when in a corner? But issue is rare so I can't troubleshoot it easily...
+
+ - Rotation does not affect the hitbox of the walls.
+    > To be used only for visual "background" walls.
+
+- Walls do not yet conform to build grid (Should be fine when using level editor)
