@@ -17,9 +17,9 @@ function setup() {
   textSize(60);
   textAlign(CENTER);
   pos = createVector(width/2,height/2);
-  vel = createVector(20,30);
+  vel = createVector(random(-10,10),random(-10,10));
 
-  if(localStorage.getItem("bounce" === null)) {
+  if(localStorage.getItem("bounce") === null) {
     localStorage.setItem("bounce", 0);
   } else {
     totalBounces = int(localStorage.getItem("bounce"));
