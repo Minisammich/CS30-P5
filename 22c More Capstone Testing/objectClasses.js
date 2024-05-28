@@ -77,14 +77,17 @@ class Player {
   }
   
 class Wall {
-    constructor(x,y,w,h,vis,rotation,hasHB) {
-      this.x = x, this.y = y, this.w = w, this.h = h;
+    constructor(x,y,w,h,vis,rotation,hasHB,textureSize) {
+      this.x = round(x), this.y = round(y), this.w = w*textureSize, this.h = h*textureSize;
       this.rotation = rotation;
+      this.texSize = textureSize;
 
       this.hasHitbox = round(hasHB);
       this.vis = vis;
 
       this.topTextureArray = [];
+
+      this.generateTopTextureArray(textureSize,3);
     }
   
     display() {
@@ -94,7 +97,8 @@ class Wall {
       if(this.vis) {
         strokeWeight(1);
         fill(fillColour);
-        let sizeX = 19, sizeY = 19;
+        let sizeX = this.texSize, sizeY = this.texSize;
+        let texArrPos = 0; // Position in the Top Texture Array.
 
         for(let i = -this.w/2; i < this.w/2; i += sizeX) {
           for(let j = -this.h/2; j < this.h/2; j += sizeY) {
@@ -103,7 +107,8 @@ class Wall {
               if(j !== -this.h/2) {
                 image(baseTexture0,i,j);
               } else {
-                let num = 0;
+                let num = this.topTextureArray[texArrPos];
+                texArrPos++;
                 this.topTexture(i,j,num);
               }
 
@@ -111,12 +116,14 @@ class Wall {
               if(j !== -this.h/2) {
                 image(baseTexture0,i,j);
               } else {
-                let num = 0;
+                let num = this.topTextureArray[texArrPos];
+                texArrPos++;
                 this.topTexture(i,j,num);
               }
 
             } else if(j === -this.h/2) {
-              let num = 0;
+              let num = this.topTextureArray[texArrPos];
+              texArrPos++;
               this.topTexture(i,j,num);
 
             } else if(j >= this.h/2-sizeY) {
@@ -131,10 +138,17 @@ class Wall {
       pop();
     }
 
+    generateTopTextureArray(sizeX,numTextures) {
+      for(let i = 0; i < this.w; i += sizeX) {
+        this.topTextureArray.push(round(random(0,numTextures)));
+      }
+    }
+
     topTexture(i,j,num) {
       if(num === 0) image((topTexture0),i,j);
       if(num === 1) image((topTexture1),i,j);
       if(num === 2) image((topTexture2),i,j);
+      if(num === 3) image((topTexture3),i,j);
     }
   
     collision() {

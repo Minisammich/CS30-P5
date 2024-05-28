@@ -6,3 +6,5 @@
 
  - Rotation does not affect the hitbox of the walls.
     > To be used only for visual "background" walls.
+
+- Walls do not yet conform to build grid (Should be fine when using level editor)

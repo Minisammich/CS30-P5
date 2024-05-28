@@ -13,11 +13,12 @@ let fillColour;
 function preload() {
   bounce = loadSound("assets/soundEffects/bounceSound.wav");
 
-  baseTexture0 = loadImage("assets/textures/dirtTestTexture2_20x20.png");
+  baseTexture0 = loadImage("assets/textures/cobbleTestTexture2_20x20.png");
 
   topTexture0 = loadImage("assets/textures/grassTestTexture2_20x20.png");
   topTexture1 = loadImage("assets/textures/grassTestTexture3_20x20.png");
   topTexture2 = loadImage("assets/textures/grassTestTexture4_20x20.png");
+  topTexture3 = loadImage("assets/textures/grassTestTexture5_20x20.png");
 
   bottomTexture = loadImage("assets/textures/testTexture2_BOTTOM_20x20.png");
 
@@ -36,16 +37,16 @@ function setup() {
 
   bounce.setVolume(0.5);
 
-  walls.push(new Wall(-30,height/2,60,height,false,0,true));
-  walls.push(new Wall(width+30,height/2,60,height,false,0,true));
+  let textureSize = 20;
+  walls.push(new Wall(-30,height/2,60/textureSize,height/textureSize,false,0,true,textureSize));
+  walls.push(new Wall(width+30,height/2,60/textureSize,height/textureSize,false,0,true,textureSize));
 
-  walls.push(new Wall(width/2,-30,width,60,false,0,true));
-  walls.push(new Wall(width/2,height+30,width,60,false,0,true));
+  walls.push(new Wall(width/2,-30,width/textureSize,60/textureSize,false,0,true,textureSize));
+  walls.push(new Wall(width/2,height+30,width/textureSize,60/textureSize,false,0,true,textureSize));
 
   for(let i = 0; i < 20; i++) {
-    walls.push(new Wall(random(0,width),random(0,height),random(0,300),random(0,300),true,0,true));
+    walls.push(new Wall(round(random(0,width/20))*20,round(random(0,height/20))*20,round(random(1,300/textureSize)),round(random(1,300/textureSize)),true,0,true,textureSize));
   }
-
   player = new Player(width/2,height/2);
 }
 
@@ -68,6 +69,7 @@ function draw() {
 
   player.display();
 
+  //buildGrid(20);
 
   fill(255,200,0);
   textSize(40);
@@ -75,16 +77,15 @@ function draw() {
   textSize(12);
 }
 
-
-function
- Buh
- (
-  moment
- )
-
-{
-console.log
-(
-  moment
-  );;;;;;;;;;;;;;;;;;;;;;;;;;;;
+function buildGrid(textureSize) {
+  rectMode(CORNERS);
+  for(let i = 0; i < width; i += textureSize) {
+    for(let j = 0; j < height; j += textureSize) {
+      if(mouseX > i && mouseX <= i+textureSize && mouseY >= j && mouseY < j+textureSize) {
+        fill(0,255,0);
+      } else {noFill();}
+      rect(i,j,i+textureSize,j+textureSize);
+    }
+  }
+  rectMode(CENTER);
 }
