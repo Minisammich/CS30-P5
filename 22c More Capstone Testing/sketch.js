@@ -10,8 +10,14 @@ let walls = [];
 
 let fillColour;
 
+let pauseMenu;
+let visible = true;
+let paused = false;
+
 function preload() {
   bounce = loadSound("assets/soundEffects/bounceSound.wav");
+
+  playerNeutral = loadImage("assets/sprites/parabolicBuh.png");
 
   baseTexture0 = loadImage("assets/textures/cobbleTestTexture2_20x20.png");
 
@@ -19,6 +25,8 @@ function preload() {
   topTexture1 = loadImage("assets/textures/grassTestTexture3_20x20.png");
   topTexture2 = loadImage("assets/textures/grassTestTexture4_20x20.png");
   topTexture3 = loadImage("assets/textures/grassTestTexture5_20x20.png");
+  topTexture4 = loadImage("assets/textures/grassTestTexture6_20x20.png");
+  topTexture5 = loadImage("assets/textures/grassTestTexture8_20x20.png");
 
   bottomTexture = loadImage("assets/textures/testTexture2_BOTTOM_20x20.png");
 
@@ -32,6 +40,10 @@ function setup() {
   rectMode(CENTER);
   textAlign(CENTER);
   angleMode(DEGREES);
+
+  pauseMenu = createGui();
+  pauseMenu.addGlobals('paused');
+  pauseMenu.setPosition(width*0.75,height*0.02);
 
   fillColour = color(255,255,255);
 
@@ -51,41 +63,45 @@ function setup() {
 }
 
 function draw() {
-  frameRate(60);
-  background(220);
-  fill(255);
+  if(pauseMenu.paused) {
 
-  player.move();
+  } else {
+    frameRate(60);
+    background(220);
+    fill(255);
 
-  if(player.graceFrames <=0) {
-    player.againstWall = false;
-    player.canJump = false;
-  }
-  for(w of walls) {
-    fillColour = 255;
-    if(w.hasHitbox) w.collision();
-    w.display();
-  }
+    player.move();
 
-  player.display();
-
-  //buildGrid(20);
-
-  fill(255,200,0);
-  textSize(40);
-  text(round(frameRate()),50,50);
-  textSize(12);
-}
-
-function buildGrid(textureSize) {
-  rectMode(CORNERS);
-  for(let i = 0; i < width; i += textureSize) {
-    for(let j = 0; j < height; j += textureSize) {
-      if(mouseX > i && mouseX <= i+textureSize && mouseY >= j && mouseY < j+textureSize) {
-        fill(0,255,0);
-      } else {noFill();}
-      rect(i,j,i+textureSize,j+textureSize);
+    if(player.graceFrames <=0) {
+      player.againstWall = false;
+      player.canJump = false;
     }
+    for(w of walls) {
+      fillColour = 255;
+      if(w.hasHitbox) w.collision();
+      w.display();
+    }
+
+    player.display();
+
+    //buildGrid(20);
+
+    fill(255,200,0);
+    textSize(40);
+    text(round(frameRate()),50,50);
+    textSize(12);
   }
-  rectMode(CENTER);
+
+  function buildGrid(textureSize) {
+    rectMode(CORNERS);
+    for(let i = 0; i < width; i += textureSize) {
+      for(let j = 0; j < height; j += textureSize) {
+        if(mouseX > i && mouseX <= i+textureSize && mouseY >= j && mouseY < j+textureSize) {
+          fill(0,255,0);
+        } else {noFill();}
+        rect(i,j,i+textureSize,j+textureSize);
+      }
+    }
+    rectMode(CENTER);
+  }
 }

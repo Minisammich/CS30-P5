@@ -35,7 +35,7 @@ class Player {
     display() {
       strokeWeight(2);
       fill(255,0,255);
-      rect(this.pos.x,this.pos.y,this.size.x,this.size.y); // Will be a sprite at some point.
+      image(playerNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2); // Will be a sprite at some point.
       fill(255);
       text(this.jumpCounter,this.pos.x,this.pos.y);
       text(this.wallJumpSpeed,this.pos.x,this.pos.y-20);
@@ -87,7 +87,7 @@ class Wall {
 
       this.topTextureArray = [];
 
-      this.generateTopTextureArray(textureSize,3);
+      this.generateTopTextureArray(textureSize,5);
     }
   
     display() {
@@ -149,6 +149,8 @@ class Wall {
       if(num === 1) image((topTexture1),i,j);
       if(num === 2) image((topTexture2),i,j);
       if(num === 3) image((topTexture3),i,j);
+      if(num === 4) image((topTexture4),i,j);
+      if(num === 5) image((topTexture5),i,j);
     }
   
     collision() {
