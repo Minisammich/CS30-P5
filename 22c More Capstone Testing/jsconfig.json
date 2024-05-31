@@ -1,10 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "es6"
-  },
   "include": [
     "*.js",
-    "**/*.js",
-    "/home/minisammich/.var/app/com.visualstudio.code/data/vscode/extensions/wmcicompsci.cs30-p5-1.7.3/p5types/global.d.ts"
+    "libraries/*.js",
+    "c:\\Users\\ryzen\\.vscode-insiders\\extensions\\wmcicompsci.cs30-p5-1.7.4\\p5types\\global.d.ts"
   ]
 }

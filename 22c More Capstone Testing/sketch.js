@@ -10,8 +10,6 @@ let walls = [];
 
 let fillColour;
 
-let pauseMenu;
-let visible = true;
 let paused = false;
 
 function preload() {
@@ -41,10 +39,6 @@ function setup() {
   textAlign(CENTER);
   angleMode(DEGREES);
 
-  pauseMenu = createGui();
-  pauseMenu.addGlobals('paused');
-  pauseMenu.setPosition(width*0.75,height*0.02);
-
   fillColour = color(255,255,255);
 
   bounce.setVolume(0.5);
@@ -63,7 +57,7 @@ function setup() {
 }
 
 function draw() {
-  if(pauseMenu.paused) {
+  if(paused) {
 
   } else {
     frameRate(60);
