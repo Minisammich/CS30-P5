@@ -19,6 +19,8 @@ function preload() {
 
   baseTexture0 = loadImage("assets/textures/cobbleTestTexture2_20x20.png");
 
+  skyBG = loadImage("assets/backgrounds/skyTestBG-1920x1280.png")
+
   topTexture0 = loadImage("assets/textures/grassTestTexture2_20x20.png");
   topTexture1 = loadImage("assets/textures/grassTestTexture3_20x20.png");
   topTexture2 = loadImage("assets/textures/grassTestTexture4_20x20.png");
@@ -61,7 +63,7 @@ function draw() {
 
   } else {
     frameRate(60);
-    background(220);
+    background(skyBG);
     fill(255);
 
     player.move();
