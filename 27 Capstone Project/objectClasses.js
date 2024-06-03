@@ -212,3 +212,25 @@ class Wall {
       }
     }
   }
+
+
+
+  class WinZone {
+    constructor(x,y,w,h) {
+      this.x = x, this.y = y, this.w = w, this.h = h;
+    }
+
+    winCheck() {
+      if(player.pos.x-player.size.x/2 < this.x+this.w/2 && player.pos.x+player.size.x/2 > this.x-this.w/2) {
+        if(player.pos.y-player.size.y/2 < this.y+this.h/2 && player.pos.y+player.size.y/2 > this.y-this.h/2) {
+          winState = true;
+          completedLevel();
+        }
+      }
+    }
+
+    display() {
+      if(winState) fill(0,255,0);
+      rect(this.x,this.y,this.w,this.h);
+    }
+  }

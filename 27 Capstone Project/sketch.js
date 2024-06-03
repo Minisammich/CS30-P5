@@ -6,7 +6,10 @@ let bounce;
 let testTexture;
 
 let player;
+let winZone;
 let walls = [];
+
+let winState = false;
 
 let fillColour;
 
@@ -17,7 +20,7 @@ function preload() {
 
   playerNeutral = loadImage("assets/sprites/parabolicBuh.png");
 
-  baseTexture0 = loadImage("assets/textures/cobbleTestTexture2_20x20.png");
+  baseTexture0 = loadImage("assets/textures/dirtTestTexture2_20x20.png");
 
   skyBG = loadImage("assets/backgrounds/skyTestBG-1920x1280.png")
 
@@ -45,6 +48,13 @@ function setup() {
 
   bounce.setVolume(0.5);
 
+  loadGameObjects();
+
+  
+  
+}
+
+function loadGameObjects() {
   let textureSize = 20;
   walls.push(new Wall(-30,height/2,60/textureSize,height/textureSize,false,0,true,textureSize));
   walls.push(new Wall(width+30,height/2,60/textureSize,height/textureSize,false,0,true,textureSize));
@@ -56,12 +66,13 @@ function setup() {
     walls.push(new Wall(round(random(0,width/20))*20,round(random(0,height/20))*20,round(random(1,300/textureSize)),round(random(1,300/textureSize)),true,0,true,textureSize));
   }
   player = new Player(width/2,height/2);
+  winZone = new WinZone(200,800,50,50);
 }
 
 function draw() {
   if(paused) {
 
-  } else {
+  } else if(!winState) {
     frameRate(60);
     background(skyBG);
     fill(255);
@@ -80,24 +91,32 @@ function draw() {
 
     player.display();
 
+    winZone.display();
+    winZone.winCheck();
+
     //buildGrid(20);
 
     fill(255,200,0);
     textSize(40);
     text(round(frameRate()),50,50);
     textSize(12);
-  }
-
-  function buildGrid(textureSize) {
-    rectMode(CORNERS);
-    for(let i = 0; i < width; i += textureSize) {
-      for(let j = 0; j < height; j += textureSize) {
-        if(mouseX > i && mouseX <= i+textureSize && mouseY >= j && mouseY < j+textureSize) {
-          fill(0,255,0);
-        } else {noFill();}
-        rect(i,j,i+textureSize,j+textureSize);
-      }
-    }
-    rectMode(CENTER);
+  } else {
+    winScreen();
   }
 }
+
+
+
+function buildGrid(textureSize) {
+  rectMode(CORNERS);
+  for(let i = 0; i < width; i += textureSize) {
+    for(let j = 0; j < height; j += textureSize) {
+      if(mouseX > i && mouseX <= i+textureSize && mouseY >= j && mouseY < j+textureSize) {
+        fill(0,255,0);
+      } else {noFill();}
+      rect(i,j,i+textureSize,j+textureSize);
+    }
+  }
+  rectMode(CENTER);
+}
+  
