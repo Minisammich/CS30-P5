@@ -13,7 +13,9 @@ let winState = false;
 
 let fillColour;
 
-let paused = false;
+let paused = true;
+let isBeginning = true;
+let pausedText = "Start Game?";
 
 function preload() {
   bounce = loadSound("assets/soundEffects/bounceSound.wav");
@@ -49,9 +51,6 @@ function setup() {
   bounce.setVolume(0.5);
 
   loadGameObjects();
-
-  
-  
 }
 
 function loadGameObjects() {
@@ -71,11 +70,14 @@ function loadGameObjects() {
 
 function draw() {
   if(paused) {
-
+    pauseScreen();
   } else if(!winState) {
     frameRate(60);
     background(skyBG);
     fill(255);
+
+    let pauseButton = new CustomButton(width-50,height*0.025,50,30,"Pause",100,100,100);
+
 
     player.move();
 
@@ -100,6 +102,15 @@ function draw() {
     textSize(40);
     text(round(frameRate()),50,50);
     textSize(12);
+
+    if(pauseButton.checkIfPressed()) {
+      paused = true;
+      isBeginning = false;
+      pausedText = "Resume?";
+    }
+    pauseButton.display();
+
+
   } else {
     winScreen();
   }
