@@ -27,6 +27,15 @@ function winScreen() {
 
 function pauseScreen() {
     background(skyBG);
+    if(!isBeginning) {
+        for(w of walls) {
+            w.display();
+        }
+        player.display();
+        winZone.display();
+    }
+    background(0,200);
+    
     text("Levels Completed: " + localStorage.getItem('levelsCompleted'),150,50);
 
     let pauseButton = new CustomButton(width/2,height*0.8,150,50,pausedText,200,100,200);
