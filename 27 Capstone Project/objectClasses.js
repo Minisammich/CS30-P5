@@ -1,6 +1,5 @@
 function keyPressed() {
   if(keyCode === 188) {
-    // if(player.graceFrames <= 0) player.canJump = false;
     if((player.againstWall && player.jumpCounter === 1) || (player.canJump && player.jumpCounter === 2)) {
       bounce.play();
       player.speed.y = -15;
@@ -87,7 +86,7 @@ class Wall {
 
       this.topTextureArray = [];
 
-      this.generateTopTextureArray(textureSize,5);
+      this.generateTopTextureArray(textureSize,4);
     }
   
     display() {
@@ -102,7 +101,6 @@ class Wall {
 
         for(let i = -this.w/2; i < this.w/2; i += sizeX) {
           for(let j = -this.h/2; j < this.h/2; j += sizeY) {
-
             if(i === -this.w/2) {
               if(j !== -this.h/2) {
                 image(baseTexture0,i,j);
@@ -140,7 +138,7 @@ class Wall {
 
     generateTopTextureArray(sizeX,numTextures) {
       for(let i = 0; i < this.w; i += sizeX) {
-        this.topTextureArray.push(round(random(0,numTextures)));
+        this.topTextureArray.push(round(random(0,numTextures-1)));
       }
     }
 
@@ -149,8 +147,8 @@ class Wall {
       if(num === 1) image((topTexture1),i,j);
       if(num === 2) image((topTexture2),i,j);
       if(num === 3) image((topTexture3),i,j);
-      if(num === 4) image((topTexture4),i,j);
-      if(num === 5) image((topTexture5),i,j);
+      // if(num === 4) image((topTexture4),i,j);
+      // if(num === 5) image((topTexture5),i,j);
     }
   
     collision() {

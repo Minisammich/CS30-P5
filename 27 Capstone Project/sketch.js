@@ -22,7 +22,7 @@ function preload() {
 
   playerNeutral = loadImage("assets/sprites/parabolicBuh.png");
 
-  baseTexture0 = loadImage("assets/textures/dirtTestTexture2_20x20.png");
+  baseTexture0 = loadImage("assets/textures/dirtTestTexture10_20x20.png");
 
   skyBG = loadImage("assets/backgrounds/skyTestBG-1920x1280.png")
 
