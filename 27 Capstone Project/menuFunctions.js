@@ -27,6 +27,7 @@ function winScreen() {
 
 function pauseScreen() {
     background(skyBG);
+
     if(!isBeginning) {
         for(w of walls) {
             w.display();
@@ -34,6 +35,7 @@ function pauseScreen() {
         player.display();
         winZone.display();
     }
+    
     background(0,200);
     
     text("Levels Completed: " + localStorage.getItem('levelsCompleted'),150,50);

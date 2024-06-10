@@ -8,6 +8,7 @@ let testTexture;
 let player;
 let winZone;
 let walls = [];
+let wallArray = [];
 
 let winState = false;
 
