@@ -21,6 +21,8 @@ class Player {
       this.speedDecay = 1;
       this.maxSpeed = 10;
 
+      this.spriteState = 0;
+
       this.acceleration = 0.75;
       this.size = createVector(50,80);
       this.againstWall = false;
@@ -34,19 +36,43 @@ class Player {
     display() {
       strokeWeight(2);
       fill(255,0,255);
-      image(playerNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2); // Will be a sprite at some point.
+
+      if(this.spriteState === 0) {
+        image(playerNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2); 
+      } else if(this.spriteState === 1) {
+        image(playerRight,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      } else if(this.spriteState === -1) {
+        image(playerLeft,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      } else if(this.spriteState === 0.5) {
+        image(playerFallingNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      } else if(this.spriteState === 1.5) {
+        image(playerFallingRight,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      } else if(this.spriteState === -1.5) {
+        image(playerFallingLeft,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      }
       fill(255);
-      text(this.jumpCounter,this.pos.x,this.pos.y);
-      text(this.wallJumpSpeed,this.pos.x,this.pos.y-20);
-      text(this.graceFrames,this.pos.x,this.pos.y + 20);
+      // text(this.jumpCounter,this.pos.x,this.pos.y);
+      // text(this.wallJumpSpeed,this.pos.x,this.pos.y-20);
+      // text(this.graceFrames,this.pos.x,this.pos.y + 20);
+      text(this.spriteState,this.pos.x,this.pos.y);
       if(this.graceFrames > 0) this.graceFrames--;
     }
   
     move() {
+      if(this.speed.y > 0) {
+        this.spriteState = 0.5;
+      } else {
+        this.spriteState = 0;
+      }
+
       if(keyIsDown(65) && !keyIsDown(69)) {
         if(this.speed.x > -this.maxSpeed) this.speed.x -= this.moveAccel;
+        if(this.spriteState === 0) {
+          this.spriteState = -1;
+        } else {this.spriteState = -1.5;}
       } else if(keyIsDown(69) && !keyIsDown(65)) {
         if(this.speed.x < this.maxSpeed) this.speed.x += this.moveAccel;
+        this.spriteState++;
       } else {
         if(this.speed.x > 0) this.speed.x -= this.speedDecay;
         if(this.speed.x < 0) this.speed.x += this.speedDecay;

@@ -58,7 +58,9 @@ function pauseScreen() {
 function reloadLevel() {
     winState = false;
     walls = [];
-    loadGameObjects();
+    //loadGameObjects();
+    loadWalls(20);
+    player = new Player(width/2, height/2);
 }
 
 

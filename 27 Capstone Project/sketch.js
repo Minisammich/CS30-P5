@@ -21,7 +21,12 @@ let pausedText = "Start Game?";
 function preload() {
   bounce = loadSound("assets/soundEffects/bounceSound.wav");
 
-  playerNeutral = loadImage("assets/sprites/parabolicBuh.png");
+  playerNeutral = loadImage("assets/sprites/transparencyTest.png");
+  playerLeft = loadImage("assets/sprites/transparencyTestLeft.png");
+  playerRight = loadImage("assets/sprites/transparencyTestRight.png");
+  playerFallingNeutral = loadImage("assets/sprites/transparencyTestFalling.png");
+  playerFallingLeft = loadImage("assets/sprites/transparencyTestFalling.png");
+  playerFallingRight = loadImage("assets/sprites/transparencyTestFalling.png");
 
   baseTexture0 = loadImage("assets/textures/dirtTestTexture10_20x20.png");
 
@@ -51,7 +56,29 @@ function setup() {
 
   bounce.setVolume(0.5);
 
-  loadGameObjects();
+  //loadGameObjects();
+  loadWalls(20);
+  player = new Player(width/2,height/2);
+  winZone = new WinZone(200,800,50,50);
+}
+
+function loadWalls(textureSize) {
+  walls.push(new Wall(-30,height/2,60/textureSize,height/textureSize,false,0,true,textureSize));
+  walls.push(new Wall(width+30,height/2,60/textureSize,height/textureSize,false,0,true,textureSize));
+
+  walls.push(new Wall(width/2,-30,width/textureSize,60/textureSize,false,0,true,textureSize));
+  walls.push(new Wall(width/2,height+30,width/textureSize,60/textureSize,false,0,true,textureSize));
+
+  for(let i = 0; i < height/textureSize; i++) {
+    wallArray.push([]);
+    for(let j = 0; j < width/textureSize; j++) {
+      if(round(random(75)) === 0) {
+        wallArray[i][j] = new Wall((j*textureSize),(i*textureSize),round(random(1,15)),round(random(1,15)),true,0,true,20);
+      } else {
+        wallArray[i][j] = 0;
+      }
+    }
+  }
 }
 
 function loadGameObjects() {
@@ -92,6 +119,16 @@ function draw() {
       w.display();
     }
 
+    for(i of wallArray) {
+      for(w of i) {
+        if(w != 0) {
+          stroke(0,255);
+          if(w.hasHitbox) w.collision();
+          w.display();
+        }
+      }
+    }
+
     player.display();
 
     winZone.display();
@@ -120,6 +157,7 @@ function draw() {
 
 
 function buildGrid(textureSize) {
+  stroke(255,0,0,100);
   rectMode(CORNERS);
   for(let i = 0; i < width; i += textureSize) {
     for(let j = 0; j < height; j += textureSize) {
