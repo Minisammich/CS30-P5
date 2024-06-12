@@ -37,19 +37,72 @@ class Player {
       strokeWeight(2);
       fill(255,0,255);
 
-      if(this.spriteState === 0) {
-        image(playerNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2); 
-      } else if(this.spriteState === 1) {
-        image(playerRight,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      } else if(this.spriteState === -1) {
-        image(playerLeft,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      } else if(this.spriteState === 0.5) {
-        image(playerFallingNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      } else if(this.spriteState === 1.5) {
-        image(playerFallingRight,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      } else if(this.spriteState === -1.5) {
-        image(playerFallingLeft,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      switch(this.spriteState) {
+
+        case 0:
+          image(playerNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+          break;
+
+        case 1:
+          image(playerRight,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+          break;
+
+        case 1.1:
+          image(playerRight0,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+          break;
+
+        case 1.2:
+          image(playerRight1,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+          break;
+
+        case -1:
+          image(playerLeft,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+          break;
+
+        case -1.1:
+          image(playerLeft0,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+          break;
+
+        case -1.2:
+          image(playerLeft1,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+          break;
+
+        case 0.5:
+          image(playerFallingNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+          break;
+
+        case 1.5:
+          image(playerFallingRight,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+          break;
+
+        case -1.5:
+          image(playerFallingLeft,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+          break;
+          
       }
+
+      // if(this.spriteState === 0) {
+      //   image(playerNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2); 
+      // } else if(this.spriteState === 1) {
+      //   image(playerRight,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      // } else if(this.spriteState === 1.1) {
+      //   image(playerRight0,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      // } else if(this.spriteState === 1.2) {
+      //   image(playerRight1,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      // } else if(this.spriteState === -1) {
+      //   image(playerLeft,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      // } else if(this.spriteState === -1.1) {
+      //   image(playerLeft0,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      // } else if(this.spriteState === -1.2) {
+      //   image(playerLeft1,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      // } else if(this.spriteState === 0.5) {
+      //   image(playerFallingNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      // } else if(this.spriteState === 1.5) {
+      //   image(playerFallingRight,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      // } else if(this.spriteState === -1.5) {
+      //   image(playerFallingLeft,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
+      // }
+      
       fill(255);
       // text(this.jumpCounter,this.pos.x,this.pos.y);
       // text(this.wallJumpSpeed,this.pos.x,this.pos.y-20);
@@ -68,11 +121,27 @@ class Player {
       if(keyIsDown(65) && !keyIsDown(69)) {
         if(this.speed.x > -this.maxSpeed) this.speed.x -= this.moveAccel;
         if(this.spriteState === 0) {
-          this.spriteState = -1;
+          if(frameCount % 15 <= 5) {
+            this.spriteState = -1;
+          } else if(frameCount % 15 <= 10) {
+            this.spriteState = -1.1;
+          } else if(frameCount % 15 <= 15) {
+            this.spriteState = -1.2;
+          }
         } else {this.spriteState = -1.5;}
       } else if(keyIsDown(69) && !keyIsDown(65)) {
         if(this.speed.x < this.maxSpeed) this.speed.x += this.moveAccel;
-        this.spriteState++;
+        if(this.spriteState === 0) {
+          if(frameCount % 15 <= 5) {
+            this.spriteState = 1;
+          } else if(frameCount % 15 <= 10) {
+            this.spriteState = 1.1;
+          } else if(frameCount % 15 <= 15) {
+            this.spriteState = 1.2;
+          }
+        } else {
+          this.spriteState = 1.5;
+        }
       } else {
         if(this.speed.x > 0) this.speed.x -= this.speedDecay;
         if(this.speed.x < 0) this.speed.x += this.speedDecay;
@@ -119,46 +188,44 @@ class Wall {
       push();
       translate(this.x,this.y);
       rotate(this.rotation);
-      if(this.vis) {
-        strokeWeight(1);
-        fill(fillColour);
-        let sizeX = this.texSize, sizeY = this.texSize;
-        let texArrPos = 0; // Position in the Top Texture Array.
+      strokeWeight(1);
+      fill(fillColour);
+      let sizeX = this.texSize, sizeY = this.texSize;
+      let texArrPos = 0; // Position in the Top Texture Array.
 
-        for(let i = -this.w/2; i < this.w/2; i += sizeX) {
-          for(let j = -this.h/2; j < this.h/2; j += sizeY) {
-            if(i === -this.w/2) {
-              if(j !== -this.h/2) {
-                image(baseTexture0,i,j);
-              } else {
-                let num = this.topTextureArray[texArrPos];
-                texArrPos++;
-                this.topTexture(i,j,num);
-              }
-
-            } else if(i >= this.w/2-sizeX) {
-              if(j !== -this.h/2) {
-                image(baseTexture0,i,j);
-              } else {
-                let num = this.topTextureArray[texArrPos];
-                texArrPos++;
-                this.topTexture(i,j,num);
-              }
-
-            } else if(j === -this.h/2) {
+      for(let i = -this.w/2; i < this.w/2; i += sizeX) {
+        for(let j = -this.h/2; j < this.h/2; j += sizeY) {
+          if(i === -this.w/2) {
+            if(j !== -this.h/2) {
+              image(baseTexture0,i,j);
+            } else {
               let num = this.topTextureArray[texArrPos];
               texArrPos++;
               this.topTexture(i,j,num);
-
-            } else if(j >= this.h/2-sizeY) {
-              image(baseTexture0,i,j);
-
-            } else {
-              image(baseTexture0,i,j);
             }
+
+          } else if(i >= this.w/2-sizeX) {
+            if(j !== -this.h/2) {
+              image(baseTexture0,i,j);
+            } else {
+              let num = this.topTextureArray[texArrPos];
+              texArrPos++;
+              this.topTexture(i,j,num);
+            }
+
+          } else if(j === -this.h/2) {
+            let num = this.topTextureArray[texArrPos];
+            texArrPos++;
+            this.topTexture(i,j,num);
+
+          } else if(j >= this.h/2-sizeY) {
+            image(baseTexture0,i,j);
+
+          } else {
+            image(baseTexture0,i,j);
           }
         }
-      }
+    }
       pop();
     }
 

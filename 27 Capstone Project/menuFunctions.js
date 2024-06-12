@@ -1,3 +1,14 @@
+clickState = false;
+
+function mousePressed() {
+    clickState = true;
+}
+
+function mouseReleased() {
+    clickState = false;
+}
+
+
 
 function completedLevel() {
     let levelsCompleted = 1;
@@ -32,6 +43,13 @@ function pauseScreen() {
         for(w of walls) {
             w.display();
         }
+        // for(w of wallArray) {
+        //     for(wall of w) {
+        //         if(wall != 0 && wall != 2) {
+        //             wall.display();
+        //         }
+        //     }
+        // }
         player.display();
         winZone.display();
     }
@@ -53,6 +71,15 @@ function pauseScreen() {
 
     if(pauseButton.checkIfPressed()) paused = false;
     pauseButton.display();
+
+    let levelEditorButton = new CustomButton(width*0.9,height*0.05,150,50,"Level Editor",100,100,200);
+
+    if(levelEditorButton.checkIfPressed()) {
+        levEdit = true;
+        walls = [];
+        borderWalls();
+    }
+    levelEditorButton.display();
 }
 
 function reloadLevel() {
@@ -85,7 +112,10 @@ class CustomButton {
     checkIfPressed() {
         if(mouseX < this.x + this.w/2 && mouseX > this.x - this.w/2 && mouseY < this.y + this.h/2 && mouseY > this.y - this.h/2) {
             fill(this.fillHovered), stroke(this.strokeHovered);
-            if(mouseIsPressed && mouseButton === LEFT) return true;
+            if(clickState && mouseButton === LEFT) {
+                clickState = false;
+                return true;
+            }
         } else {
             fill(this.fillNormal), stroke(this.strokeHovered);
             return false; 
