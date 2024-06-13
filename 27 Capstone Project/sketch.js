@@ -201,18 +201,22 @@ function levelEditor() {
     pausedText = "Start Game?";
 
   } else if(clickState && mouseButton === LEFT) {
-    console.log("wall!");
     row = round((mouseY+textureSize/2)/textureSize), col = round((mouseX+textureSize/2)/textureSize);
 
     walls.push(new Wall(col*textureSize-(textureSize/2),row*textureSize-(textureSize/2),1,1,true,0,true,textureSize));
     clickState = false;
+  } else if(clickState && mouseButton === CENTER) {
+    row = round((mouseY+textureSize/2)/textureSize), col = round((mouseX+textureSize/2)/textureSize);
+    winZone = new WinZone(col*textureSize-(textureSize/2),row*textureSize-(textureSize/2),60,60);
   }
+  menuButton.display();
+
 
   for(w of walls) {
     w.display();
   }
 
-  menuButton.display();
+  winZone.display();
 }
 
 function buildGrid(textureSize) {

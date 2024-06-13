@@ -321,6 +321,7 @@ class Wall {
     }
 
     display() {
+      fill(255);
       if(winState) fill(0,255,0);
       rect(this.x,this.y,this.w,this.h);
     }
