@@ -10,7 +10,7 @@ function mouseReleased() {
 
 
 
-function completedLevel() {
+function completedLevel() { // Stores number of levels completed.
     let levelsCompleted = 1;
     if(localStorage.getItem('levelsCompleted') !== null) {
         levelsCompleted = int(localStorage.getItem('levelsCompleted'));
@@ -19,11 +19,11 @@ function completedLevel() {
     localStorage.setItem('levelsCompleted',levelsCompleted);
 }
 
-function resetGameLocalStorage() {
+function resetGameLocalStorage() { // Resets levels completed in local storage to 0.
     localStorage.setItem('levelsCompleted',0);
 }
 
-function winScreen() {
+function winScreen() { // Displays win text and continue button when level is won.
     let continueButton = new CustomButton(width/2,height*0.8,100,50,"Continue?",200,100,200);
 
     background(0);
@@ -36,9 +36,10 @@ function winScreen() {
     continueButton.display();
 }
 
-function pauseScreen() {
+function pauseScreen() { // Displays menu screen when paused.
     background(skyBG);
 
+    // Renders walls if isn't beginning of game.
     if(!isBeginning) {
         for(w of walls) {
             w.display();
@@ -56,6 +57,7 @@ function pauseScreen() {
     
     background(0,200);
     
+    // Displays # of levels completed.
     text("Levels Completed: " + localStorage.getItem('levelsCompleted'),150,50);
 
     let pauseButton = new CustomButton(width/2,height*0.8,150,50,pausedText,200,100,200);
@@ -91,7 +93,7 @@ function reloadLevel() {
 }
 
 
-class CustomButton {
+class CustomButton { // Button class cause I didn't like p5.js built in buttons.
     constructor(x,y,w,h,text,r,g,b) {
         this.x = x, this.y = y;
         this.w = w; this.h = h;
@@ -101,7 +103,7 @@ class CustomButton {
         this.textScale = (this.w+this.h)/8;
     }
 
-    display() {
+    display() { // Displays rectangle of specified size at specified location.
         strokeWeight(1);
         rect(this.x,this.y,this.w,this.h);
         textSize(this.textScale);
@@ -109,7 +111,7 @@ class CustomButton {
         text(this.text,this.x,this.y+(this.h/(this.textScale)*2.5));
     }
 
-    checkIfPressed() {
+    checkIfPressed() { // Checks if button is pressed, also changes fill colour when hovered.
         if(mouseX < this.x + this.w/2 && mouseX > this.x - this.w/2 && mouseY < this.y + this.h/2 && mouseY > this.y - this.h/2) {
             fill(this.fillHovered), stroke(this.strokeHovered);
             if(clickState && mouseButton === LEFT) {

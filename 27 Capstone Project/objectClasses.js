@@ -37,6 +37,7 @@ class Player {
       strokeWeight(2);
       fill(255,0,255);
 
+      // Draws different sprites based on state.
       switch(this.spriteState) {
 
         case 0:
@@ -111,15 +112,20 @@ class Player {
       if(this.graceFrames > 0) this.graceFrames--;
     }
   
-    move() {
+    move() { // Checks keys and moves player accordingly.
+
+      // Sets whether to display neutral or falling sprites.
       if(this.speed.y > 0) {
         this.spriteState = 0.5;
       } else {
         this.spriteState = 0;
       }
 
+      // Currently set for Dvorak layout, will change.
       if(keyIsDown(65) && !keyIsDown(69)) {
-        if(this.speed.x > -this.maxSpeed) this.speed.x -= this.moveAccel;
+        if(this.speed.x > -this.maxSpeed) this.speed.x -= this.moveAccel; // Speed Limit!
+
+        // Progresses sprite to facilitate walking animation.
         if(this.spriteState === 0) {
           if(frameCount % 15 <= 5) {
             this.spriteState = -1;
@@ -129,8 +135,11 @@ class Player {
             this.spriteState = -1.2;
           }
         } else {this.spriteState = -1.5;}
+
       } else if(keyIsDown(69) && !keyIsDown(65)) {
-        if(this.speed.x < this.maxSpeed) this.speed.x += this.moveAccel;
+        if(this.speed.x < this.maxSpeed) this.speed.x += this.moveAccel; // Speed limit!
+        
+        // Progresses sprite to facilitate walking animation.
         if(this.spriteState === 0) {
           if(frameCount % 15 <= 5) {
             this.spriteState = 1;
@@ -142,7 +151,10 @@ class Player {
         } else {
           this.spriteState = 1.5;
         }
+
       } else {
+
+        // Decays speed to decelerate instead of stopping on a dime.
         if(this.speed.x > 0) this.speed.x -= this.speedDecay;
         if(this.speed.x < 0) this.speed.x += this.speedDecay;
         if(this.speed.x < 1 && this.speed.x > -1) this.speed.x = 0;
@@ -152,12 +164,12 @@ class Player {
       this.gravity();
     }
   
-    gravity() {
+    gravity() { // Player falls instead of floating.
       this.speed.y += this.acceleration;
       this.pos.y += this.speed.y;
     }
   
-    moveTo(x,y) {
+    moveTo(x,y) { // Moves player to a new position.
       this.pos.x = x, this.pos.y = y;
     }
   
@@ -193,6 +205,8 @@ class Wall {
       let sizeX = this.texSize, sizeY = this.texSize;
       let texArrPos = 0; // Position in the Top Texture Array.
 
+
+      // Determines based on position of wall, what texture to display.
       for(let i = -this.w/2; i < this.w/2; i += sizeX) {
         for(let j = -this.h/2; j < this.h/2; j += sizeY) {
           if(i === -this.w/2) {
@@ -230,12 +244,14 @@ class Wall {
     }
 
     generateTopTextureArray(sizeX,numTextures) {
+      // Randomizes top textures.
       for(let i = 0; i < this.w; i += sizeX) {
         this.topTextureArray.push(round(random(0,numTextures-1)));
       }
     }
 
     topTexture(i,j,num) {
+      // Draws different textures on top of wall to break the tiled look.
       if(num === 0) image((topTexture0),i,j);
       if(num === 1) image((topTexture1),i,j);
       if(num === 2) image((topTexture2),i,j);
@@ -248,11 +264,13 @@ class Wall {
       let playerPos = player.returnPos();
       let playerSize = player.returnSize();
   
+      // Checks which edges the player is on/within.
       let collideLeft = playerPos.x + playerSize.x/2+1 > this.x - this.w/2; 
       let collideRight = playerPos.x - playerSize.x/2-1 < this.x + this.w/2;
       let collideTop = playerPos.y + playerSize.y/2 > (this.y) - this.h/2;
       let collideBottom = playerPos.y - playerSize.y/2 < this.y + this.h/2;
   
+      // Checks which edge the player is nearest.
       let distToBot = dist(0,this.y+this.h/2,0,playerPos.y-playerSize.y/2);
       let distToTop = dist(0,this.y-this.h/2,0,playerPos.y+playerSize.y/2);
       let distToRight = dist(this.x+this.w/2,0,playerPos.x-playerSize.x/2,0);
@@ -260,17 +278,17 @@ class Wall {
   
       if(collideTop && collideBottom && collideLeft && collideRight) {
         fillColour = color(0,255,0);
-        player.graceFrames = 5;
+        player.graceFrames = 5; // Resets grace frames when player is against a wall.
 
-        if(distToBot < distToTop) {
+        if(distToBot < distToTop) { // If player is closer to bottom of wall than top.
 
-          if(distToBot < distToRight && distToBot < distToLeft) {
+          if(distToBot < distToRight && distToBot < distToLeft) { // If player is not closer to right or left than bottom.
             player.speed.y = 0;
             player.moveTo(playerPos.x,this.y+this.h/2+playerSize.y/2);
-          } else {
+          } else { // Player is considered against a wall.
             player.canJump = true;
             player.againstWall = true;
-            if(distToRight < distToLeft) {
+            if(distToRight < distToLeft) { // Checks which side of wall player is against. Sets jump direction modifier accordingly.
               player.wallJumpSpeed = player.wallJumpMod;
               player.speed.x = 0;
               player.moveTo(this.x+this.w/2+playerSize.x/2,playerPos.y);
@@ -281,8 +299,8 @@ class Wall {
             }
 
           }
-        } else if(distToTop < distToRight && distToTop < distToLeft) {
-          if(player.speed.y > 5) bounce.play();
+        } else if(distToTop < distToRight && distToTop < distToLeft) { // If player is on top of wall object.
+          if(player.speed.y > 5) bounce.play(); // Plays sound when player hits a floor with >5 speed. (Player landing sfx eventually.)
           player.speed.y = 0;
           player.canJump = true;
           player.jumpCounter = 2;
@@ -290,7 +308,7 @@ class Wall {
         } else {
           player.canJump = true;
           player.againstWall = true;
-          if(distToRight < distToLeft) {
+          if(distToRight < distToLeft) { // Checks which side of wall player is against. Sets jump direction modifier accordingly.
             player.wallJumpSpeed = player.wallJumpMod;
             player.speed.x = 0;
             player.moveTo(this.x+this.w/2+playerSize.x/2,playerPos.y);
@@ -314,6 +332,7 @@ class Wall {
     winCheck() {
       if(player.pos.x-player.size.x/2 < this.x+this.w/2 && player.pos.x+player.size.x/2 > this.x-this.w/2) {
         if(player.pos.y-player.size.y/2 < this.y+this.h/2 && player.pos.y+player.size.y/2 > this.y-this.h/2) {
+          // If the player is within the bounds of the win zone square, player wins.
           winState = true;
           completedLevel();
         }
