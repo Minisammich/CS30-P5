@@ -92,7 +92,7 @@ function reloadLevel() {
     winState = false;
     walls = [];
     loadWalls(textureSize);
-    player = new Player(width/2, height/2);
+    player = new Player(playerStart.x,playerStart.y);
 }
 
 

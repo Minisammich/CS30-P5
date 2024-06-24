@@ -2,6 +2,22 @@
 // Jeffrey Hamilton
 // 18/May/2024
 
+// HOW TO USE:
+// By default no level is loaded (Haven't made any yet).
+//
+// You will have to design your own level using the Level Editor for now.
+//
+// In the Level Editor:
+// Left click - Spawn Wall.
+// Scroll Wheel - change X size of wall.
+// Shift + Scroll - Change Y size of wall.
+// Middle Click - Move Win Zone (Finish).
+// Shift + Middle Click - Move Start Position of Player.
+//
+// In Game:
+// W - Jump.
+// A/D - Left/Right.
+
 let bounce; // Test sound used to make sure the final sounds will play at the right moments.
 
 const textureSize = 20;
