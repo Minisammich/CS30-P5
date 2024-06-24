@@ -37,7 +37,6 @@ let foxes = [];
 function preload(){
   loadStatic();     //defined at bottom
   loadAnimation();  //also defined at bottom
-
 }
 
 function setup() {

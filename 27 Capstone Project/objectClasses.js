@@ -1,5 +1,5 @@
 function keyPressed() {
-  if(keyCode === 188) {
+  if(keyCode === W) {
     if((player.againstWall && player.jumpCounter === 1) || (player.canJump && player.jumpCounter === 2)) {
       bounce.play();
       player.speed.y = -15;
@@ -81,34 +81,12 @@ class Player {
           break;
           
       }
-
-      // if(this.spriteState === 0) {
-      //   image(playerNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2); 
-      // } else if(this.spriteState === 1) {
-      //   image(playerRight,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      // } else if(this.spriteState === 1.1) {
-      //   image(playerRight0,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      // } else if(this.spriteState === 1.2) {
-      //   image(playerRight1,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      // } else if(this.spriteState === -1) {
-      //   image(playerLeft,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      // } else if(this.spriteState === -1.1) {
-      //   image(playerLeft0,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      // } else if(this.spriteState === -1.2) {
-      //   image(playerLeft1,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      // } else if(this.spriteState === 0.5) {
-      //   image(playerFallingNeutral,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      // } else if(this.spriteState === 1.5) {
-      //   image(playerFallingRight,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      // } else if(this.spriteState === -1.5) {
-      //   image(playerFallingLeft,this.pos.x-this.size.x/2,this.pos.y-this.size.y/2);
-      // }
       
       fill(255);
       // text(this.jumpCounter,this.pos.x,this.pos.y);
       // text(this.wallJumpSpeed,this.pos.x,this.pos.y-20);
       // text(this.graceFrames,this.pos.x,this.pos.y + 20);
-      text(this.spriteState,this.pos.x,this.pos.y);
+      // text(this.spriteState,this.pos.x,this.pos.y);
       if(this.graceFrames > 0) this.graceFrames--;
     }
   
@@ -122,7 +100,7 @@ class Player {
       }
 
       // Currently set for Dvorak layout, will change.
-      if(keyIsDown(65) && !keyIsDown(69)) {
+      if(keyIsDown(A) && !keyIsDown(D)) {
         if(this.speed.x > -this.maxSpeed) this.speed.x -= this.moveAccel; // Speed Limit!
 
         // Progresses sprite to facilitate walking animation.
@@ -136,7 +114,7 @@ class Player {
           }
         } else {this.spriteState = -1.5;}
 
-      } else if(keyIsDown(69) && !keyIsDown(65)) {
+      } else if(keyIsDown(D) && !keyIsDown(A)) {
         if(this.speed.x < this.maxSpeed) this.speed.x += this.moveAccel; // Speed limit!
         
         // Progresses sprite to facilitate walking animation.

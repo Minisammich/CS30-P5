@@ -8,6 +8,16 @@ function mouseReleased() {
     clickState = false;
 }
 
+function mouseWheel() {
+    if(!keyIsDown(16)) {
+        wallPlaceSize.x -= round(event.delta/100);
+        if(wallPlaceSize.x < 1) wallPlaceSize.x = 1; 
+    } else {
+        wallPlaceSize.y -= round(event.delta/100);
+        if(wallPlaceSize.y < 1) wallPlaceSize.y = 1;
+    }
+}
+
 
 
 function completedLevel() { // Stores number of levels completed.
@@ -44,18 +54,11 @@ function pauseScreen() { // Displays menu screen when paused.
         for(w of walls) {
             w.display();
         }
-        // for(w of wallArray) {
-        //     for(wall of w) {
-        //         if(wall != 0 && wall != 2) {
-        //             wall.display();
-        //         }
-        //     }
-        // }
         player.display();
         winZone.display();
     }
     
-    background(0,200);
+    background(0,200); // Creates a partial opacity black layer to dim the game behind the menu.
     
     // Displays # of levels completed.
     text("Levels Completed: " + localStorage.getItem('levelsCompleted'),150,50);
@@ -77,6 +80,7 @@ function pauseScreen() { // Displays menu screen when paused.
     let levelEditorButton = new CustomButton(width*0.9,height*0.05,150,50,"Level Editor",100,100,200);
 
     if(levelEditorButton.checkIfPressed()) {
+        loadWalls(textureSize,true);
         levEdit = true;
         walls = [];
         borderWalls();
@@ -87,8 +91,7 @@ function pauseScreen() { // Displays menu screen when paused.
 function reloadLevel() {
     winState = false;
     walls = [];
-    //loadGameObjects();
-    loadWalls(20);
+    loadWalls(textureSize);
     player = new Player(width/2, height/2);
 }
 
@@ -124,3 +127,71 @@ class CustomButton { // Button class cause I didn't like p5.js built in buttons.
         }
     }
 }
+
+function levelEditor() {
+    background(skyBG);
+    buildGrid(textureSize); // Draws grid where walls can be placed.
+  
+    let menuButton = new CustomButton(width*0.96,height*0.02,50,25,"Menu",215,50,0);
+    let row = round((mouseY+textureSize/2)/textureSize), col = round((mouseX+textureSize/2)/textureSize);
+    if(menuButton.checkIfPressed()) {
+      paused = true;
+      levEdit = false;
+      isBeginning = false;
+      pausedText = "Start Game?";
+      player.moveTo(playerStart.x,playerStart.y);
+  
+    } else if(clickState && mouseButton === LEFT) {
+      // Places wall on the grid square the mouse is hovering on.
+      wallArray[row][col] = createVector(wallPlaceSize.x,wallPlaceSize.y);
+      // walls.push(new Wall(col*textureSize-(textureSize/2),row*textureSize-(textureSize/2),1,1,true,0,true,textureSize));
+      walls = [];
+      loadWalls(textureSize,false);
+      clickState = false;
+    } else if(clickState && mouseButton === CENTER) {
+        if(!keyIsDown(16)) {
+            // Places win zone on grid square mouse is hovering on.
+            wallArray[winPos.x][winPos.y] = 0;
+            wallArray[row][col] = 2;
+            walls = [];
+            loadWalls(textureSize,false);
+            clickState = false;
+            //winZone = new WinZone(col*textureSize-(textureSize/2),row*textureSize-(textureSize/2),60,60);
+        } else {
+            wallArray[round(playerStart.x/textureSize)][round(playerStart.y/textureSize)] = 0;
+            playerStart = createVector(col*textureSize,row*textureSize);
+            wallArray[row][col] = 3;
+            loadWalls(textureSize,false);
+            clickState = false;
+        }
+    }
+    rect(playerStart.x-(textureSize/2),playerStart.y-(textureSize/2),textureSize)
+    menuButton.display();
+  
+  
+    // Displays walls so you know where they've been placed.
+    for(w of walls) {
+      w.display();
+    }
+  
+    winZone.display();
+
+    fill(0,255,0,100);
+    rect(col*textureSize-(textureSize/2),row*textureSize-(textureSize/2),wallPlaceSize.x*textureSize,wallPlaceSize.y*textureSize);
+  }
+  
+  function buildGrid(textureSize) {
+    stroke(255,0,0,100);
+    rectMode(CORNERS);
+    noFill();
+    for(let i = 0; i < width; i += textureSize) {
+      for(let j = 0; j < height; j += textureSize) {
+        // if(mouseX > i && mouseX <= i+textureSize && mouseY >= j && mouseY < j+textureSize) {
+        //   // Fills square green if you're hovering over it.
+        //   fill(0,255,0);
+        // } else {noFill();}
+        rect(i,j,i+textureSize,j+textureSize);
+      }
+    }
+    rectMode(CENTER);
+  }

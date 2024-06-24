@@ -6,18 +6,27 @@ let bounce; // Test sound used to make sure the final sounds will play at the ri
 
 const textureSize = 20;
 
+const W = 188;
+const A = 65;
+const S = 79;
+const D = 69;
+
 let rows, cols;
 
 let player; // Variable to hold player object.
 let winZone; // Variable to hold win zone object.
 let walls = []; // Array for wall objects.
 let wallArray = []; // Array to load wall positions from a file.
+let winPos;
+let playerStart;
 
 let winState = false;
 
 let fillColour;
 
 let levEdit = false; // Whether to run level editor or not.
+let wallPlaceSize;
+
 let paused = true; // Whether game is paused or not.
 let isBeginning = true; // Whether game has just begun.
 let pausedText = "Start Game?"; // What text is displayed on the pause menu button.
@@ -72,11 +81,13 @@ function setup() {
 
   bounce.setVolume(0.5);
 
+  wallPlaceSize = createVector(5,5);
+  playerStart = createVector(0,0);
+
   cols = width/textureSize;
   rows = height/textureSize;
 
-  //loadGameObjects();
-  loadWalls(20);
+  loadWalls(20,true);
   player = new Player(width/2,height/2);
 }
 
@@ -88,52 +99,44 @@ function borderWalls() { // Adds walls to the borders of the screen (So player d
   walls.push(new Wall(width/2,height+30,width/textureSize,60/textureSize,false,0,true,textureSize));
 }
 
-function loadWalls(textureSize) {
+function loadWalls(textureSize,init) {
   borderWalls();
 
-  // Randomizes wall positions (Only intended for testing).
-  for(let i = 0; i < rows; i++) {
-    wallArray.push([]);
-    for(let j = 0; j < cols; j++) {
-      if(round(random(75)) === 0) {
-        wallArray[i][j] = 1
-      } else {
+  if(init) {
+    wallArray = [];
+    for(let i = 0; i < rows; i++) {
+      wallArray.push([]);
+      for(let j = 0; j < cols; j++) {
         wallArray[i][j] = 0;
+        // if(round(random(75)) === 0) {
+        //   wallArray[i][j] = 1
+        // } else {
+        //   wallArray[i][j] = 0;
+        // }
       }
     }
+
+    // Randomizes win zone position (Only for testing).
+    let y = round(random(2,rows-2)), x = round(random(2,cols-2));
+    wallArray[y][x] = 2;
   }
-
-
-  // Randomizes win zone position (Only for testing).
-  let y = round(random(2,rows-2)), x = round(random(2,cols-2));
-  wallArray[y][x] = 2;
 
 
   // Adds walls to array based on where wallArray specifies.
   for(let i = 0; i < rows; i++) {
     for(let j = 0; j < cols; j++) {
-      if(wallArray[i][j] === 1) {
-        walls.push(new Wall((j*textureSize-(textureSize/2)),(i*textureSize-(textureSize/2)),round(random(1,15)),round(random(1,15)),true,0,true,20));
+      if(wallArray[i][j] != 0 && wallArray[i][j] != 2 && wallArray != 3) {
+        let currWall = wallArray[i][j];
+        walls.push(new Wall((j*textureSize-(textureSize/2)),(i*textureSize-(textureSize/2)),currWall.x,currWall.y,true,0,true,20));
       } else if(wallArray[i][j] === 2) {
-        winZone = new WinZone(i*textureSize-(textureSize/2),j*textureSize-(textureSize/2),textureSize*2,textureSize*2);
+        winZone = new WinZone(j*textureSize-(textureSize/2),i*textureSize-(textureSize/2),textureSize*2,textureSize*2);
+        winPos = createVector(i,j);
+      } else if(wallArray[i][j] === 3) {
+        playerStart = createVector(j*textureSize,i*textureSize);
       }
     }
   }
 }
-
-// function loadGameObjects() {
-//   walls.push(new Wall(-30,height/2,60/textureSize,height/textureSize,false,0,true,textureSize));
-//   walls.push(new Wall(width+30,height/2,60/textureSize,height/textureSize,false,0,true,textureSize));
-
-//   walls.push(new Wall(width/2,-30,width/textureSize,60/textureSize,false,0,true,textureSize));
-//   walls.push(new Wall(width/2,height+30,width/textureSize,60/textureSize,false,0,true,textureSize));
-
-//   for(let i = 0; i < 20; i++) {
-//     walls.push(new Wall(round(random(0,width/20))*20,round(random(0,height/20))*20,round(random(1,300/textureSize)),round(random(1,300/textureSize)),true,0,true,textureSize));
-//   }
-//   player = new Player(width/2,height/2);
-//   winZone = new WinZone(random(0,width),random(0,height),textureSize,textureSize);
-// }
 
 function draw() {
   if(levEdit) {
@@ -166,22 +169,10 @@ function draw() {
       if(w.vis) w.display();
     }
 
-    // for(i of wallArray) {
-    //   for(w of i) {
-    //     if(w != 0 && w != 2) {
-    //       stroke(0,255);
-    //       if(w.hasHitbox) w.collision();
-    //       w.display();
-    //     }
-    //   }
-    // }
-
     player.display();
 
     winZone.display();
     winZone.winCheck();
-
-    //buildGrid(20);
 
     fill(255,200,0);
     textSize(40);
@@ -200,52 +191,4 @@ function draw() {
   } else {
     winScreen();
   }
-}
-
-function levelEditor() {
-  background(skyBG);
-  buildGrid(textureSize); // Draws grid where walls can be placed.
-
-  let menuButton = new CustomButton(width*0.96,height*0.02,50,25,"Menu",215,50,0);
-  if(menuButton.checkIfPressed()) {
-    paused = true;
-    levEdit = false;
-    isBeginning = true;
-    pausedText = "Start Game?";
-
-  } else if(clickState && mouseButton === LEFT) {
-    // Places wall on the grid square the mouse is hovering on.
-    row = round((mouseY+textureSize/2)/textureSize), col = round((mouseX+textureSize/2)/textureSize);
-
-    walls.push(new Wall(col*textureSize-(textureSize/2),row*textureSize-(textureSize/2),1,1,true,0,true,textureSize));
-    clickState = false;
-  } else if(clickState && mouseButton === CENTER) {
-    // Places win zone on grid square mouse is hovering on.
-    row = round((mouseY+textureSize/2)/textureSize), col = round((mouseX+textureSize/2)/textureSize);
-    winZone = new WinZone(col*textureSize-(textureSize/2),row*textureSize-(textureSize/2),60,60);
-  }
-  menuButton.display();
-
-
-  // Displays walls so you know where they've been placed.
-  for(w of walls) {
-    w.display();
-  }
-
-  winZone.display();
-}
-
-function buildGrid(textureSize) {
-  stroke(255,0,0,100);
-  rectMode(CORNERS);
-  for(let i = 0; i < width; i += textureSize) {
-    for(let j = 0; j < height; j += textureSize) {
-      if(mouseX > i && mouseX <= i+textureSize && mouseY >= j && mouseY < j+textureSize) {
-        // Fills square green if you're hovering over it.
-        fill(0,255,0);
-      } else {noFill();}
-      rect(i,j,i+textureSize,j+textureSize);
-    }
-  }
-  rectMode(CENTER);
 }
