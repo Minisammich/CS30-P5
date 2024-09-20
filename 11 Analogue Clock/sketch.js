@@ -8,6 +8,11 @@
 let currentTime = new Date();
 let clockSetHours, clockSetMinutes, clockSetSeconds;
 let clockHours, clockMinutes, clockSeconds;
+let secHandWobble = 0;
+let secHandWobbleVel = 2;
+let secWobbleAccel = 2;
+let framerate = 60;
+let wobbleDir = 1;
 
 let state = 0;
 
@@ -29,25 +34,25 @@ function draw() {
 }
 
 
-function clockOption1(x,y) { // Smooth Seconds Hand. Re grabs true time every minute due to variance of framerate causing drift.
-  frameRate(60);
+function clockOption2(x,y) { // Smooth Seconds Hand. Re grabs true time every minute due to variance of framerate causing drift.
+  frameRate(framerate);
   drawClock(x,y);
   hourHand(x,y);
   minuteHand(x,y);
-  secondsHand(x,y);
+  secondsHand(x,y,1);
   if((frameCount%60)===0) {
     getCurrentTime();
     frameCount=0;
   }
 }
 
-function clockOption2(x,y) { // Choppy Seconds Hand. Grabs true time every second. More accurate, less visually appealing.
-  frameRate(1);
+function clockOption1(x,y) { // Choppy Seconds Hand. Grabs true time every second. More accurate, less visually appealing.
+  frameRate(framerate);
   drawClock(x,y);
   hourHand(x,y);
   minuteHand(x,y);
-  secondsHand(x,y);
-  if((frameCount)>=1) {
+  secondsHand(x,y,2);
+  if((frameCount>=framerate)) {
     getCurrentTime();
     frameCount=0;
   }
@@ -108,14 +113,39 @@ function drawClock(clockCentreX,clockCentreY) {
   pop();
 }
 
-function secondsHand(clockCentreX,clockCentreY) {
+function secondsHand(clockCentreX,clockCentreY,option) {
   stroke(255,0,0);
   fill(255,0,0);
   strokeWeight(3);
   push();
   translate(clockCentreX, clockCentreY);
   circle(0,0,12)
-  rotate((frameCount/10)+180+clockSeconds);
+  if(option===1) {
+    rotate((frameCount/10)+180+clockSeconds);
+  } else if(option===2) {
+    if(frameCount%framerate===0) {
+      secHandWobble = 5;
+    }
+    if(secHandWobble < 0.1 && secHandWobble > -0.1){
+      secHandWobble = 0;
+      secHandWobbleVel = 1;
+    } else if(secHandWobble>0) {
+      if(wobbleDir===1) {
+        wobbleDir = -1;
+        secHandWobbleVel = 1;
+      }
+      secHandWobble-=secHandWobbleVel;
+      secHandWobbleVel*=secWobbleAccel;
+    } else if(secHandWobble<0){
+      if(wobbleDir===-1) {
+        wobbleDir = 1;
+        secHandWobbleVel = 1;
+      }
+      secHandWobble+=secHandWobbleVel;
+      secHandWobbleVel*=secWobbleAccel;
+    }
+    rotate(180+clockSeconds+secHandWobble);
+  }
   line(0,-30,0,215);
   strokeWeight(7);
   line(0,-30,0,-65);
