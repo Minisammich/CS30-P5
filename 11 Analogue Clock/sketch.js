@@ -3,16 +3,18 @@
 // 18/Mar/2024
 //
 // Extra for Experts:
-// - Analogue clock with accurate time and the option to choose between a smooth seconds hand or a snappy one.
+// - Analogue clock with accurate time and the option to choose between a smooth seconds hand or a snappy and realistic one.
 
 let currentTime = new Date();
 let clockSetHours, clockSetMinutes, clockSetSeconds;
 let clockHours, clockMinutes, clockSeconds;
+
 let secHandWobble = 0;
 let secHandWobbleVel = 2;
 let secWobbleAccel = 2;
-let framerate = 60;
 let wobbleDir = 1;
+
+let framerate = 60;
 
 let state = 0;
 
@@ -22,6 +24,7 @@ function setup() {
   getCurrentTime();
   textAlign(CENTER);
   textSize(40);
+  frameRate(framerate);
 }
 
 function draw() {
@@ -34,8 +37,7 @@ function draw() {
 }
 
 
-function clockOption2(x,y) { // Smooth Seconds Hand. Re grabs true time every minute due to variance of framerate causing drift.
-  frameRate(framerate);
+function clockOption2(x,y) { // Smooth Seconds Hand. Re grabs true time every second due to variance of framerate causing drift.
   drawClock(x,y);
   hourHand(x,y);
   minuteHand(x,y);
@@ -46,8 +48,7 @@ function clockOption2(x,y) { // Smooth Seconds Hand. Re grabs true time every mi
   }
 }
 
-function clockOption1(x,y) { // Choppy Seconds Hand. Grabs true time every second. More accurate, less visually appealing.
-  frameRate(framerate);
+function clockOption1(x,y) { // Snappy Seconds Hand. Grabs true time every second.
   drawClock(x,y);
   hourHand(x,y);
   minuteHand(x,y);
@@ -123,27 +124,29 @@ function secondsHand(clockCentreX,clockCentreY,option) {
   if(option===1) {
     rotate((frameCount/10)+180+clockSeconds);
   } else if(option===2) {
-    if(frameCount%framerate===0) {
-      secHandWobble = 5;
-    }
-    if(secHandWobble < 0.1 && secHandWobble > -0.1){
-      secHandWobble = 0;
-      secHandWobbleVel = 1;
-    } else if(secHandWobble>0) {
-      if(wobbleDir===1) {
-        wobbleDir = -1;
-        secHandWobbleVel = 1;
+    if(framerate >= 10) {
+      if(frameCount%framerate===0) {
+        secHandWobble = 5;
       }
-      secHandWobble-=secHandWobbleVel;
-      secHandWobbleVel*=secWobbleAccel;
-    } else if(secHandWobble<0){
-      if(wobbleDir===-1) {
-        wobbleDir = 1;
+      if(secHandWobble < 0.1 && secHandWobble > -0.1){
+        secHandWobble = 0;
         secHandWobbleVel = 1;
+      } else if(secHandWobble>0) {
+        if(wobbleDir===1) {
+          wobbleDir = -1;
+          secHandWobbleVel = 1;
+        }
+        secHandWobble-=secHandWobbleVel;
+        secHandWobbleVel*=secWobbleAccel;
+      } else if(secHandWobble<0){
+        if(wobbleDir===-1) {
+          wobbleDir = 1;
+          secHandWobbleVel = 1;
+        }
+        secHandWobble+=secHandWobbleVel;
+        secHandWobbleVel*=secWobbleAccel;
       }
-      secHandWobble+=secHandWobbleVel;
-      secHandWobbleVel*=secWobbleAccel;
-    }
+    } 
     rotate(180+clockSeconds+secHandWobble);
   }
   line(0,-30,0,215);
