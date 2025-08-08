@@ -14,7 +14,7 @@ let secHandWobbleVel = 2;
 let secWobbleAccel = 2;
 let wobbleDir = 1;
 
-let framerate = 60;
+let framerate = 30;
 
 let state = 0;
 

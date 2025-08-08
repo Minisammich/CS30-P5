@@ -3,7 +3,7 @@
 // 06/May/2024
 
 function setup() {
-  createCanvas(300,200);
+  createCanvas(1000,1000);
   noFill();
 }
 
@@ -11,6 +11,7 @@ function draw() {
   background(220);
   //cantor(width*0.1,height*0.3,width*0.8,9);
   circleFractal(width/2,height*0.65,width/2,12);
+  //concentricCircle(500)
 }
 
 

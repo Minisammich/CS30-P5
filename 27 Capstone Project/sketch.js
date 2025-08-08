@@ -23,17 +23,17 @@ let bounce; // Test sound used to make sure the final sounds will play at the ri
 const textureSize = 20;
 
 // QWERTY Keybinds.
-const W = 87;
-const A = 65;
-const S = 83;
-const D = 68;
+// const W = 87;
+// const A = 65;
+// const S = 83;
+// const D = 68;
 
 
 // Dvorak Keybinds.
-// const W = 188;
-// const A = 65;
-// const S = 79;
-// const D = 69;
+const W = 188;
+const A = 65;
+const S = 79;
+const D = 69;
 
 let rows, cols;
 
